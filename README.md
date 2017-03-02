@@ -1,6 +1,3 @@
-# bpwaa
+### What is this repository for? ###
 
-## how to run
-
-* run ```npm install```
-* run ```node server.js```
+* Bachlor thesis Web Audio API

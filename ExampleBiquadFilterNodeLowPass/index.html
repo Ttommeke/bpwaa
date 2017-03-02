@@ -1,0 +1,23 @@
+<html>
+    <head>
+        <title>Soundplay ground</title>
+        <link rel="stylesheet" type="text/css" href="/style/base.css">
+    </head>
+    <body>
+        <div id="app">
+            <h1>Master control lowPass</h1>
+            Frequency (currently: <input type="number" v-model="frequency" />) <input class="inputSlider" type="range" min="0" max="20000" v-model="frequency" step="1" /><br />
+            Q (currently: <input type="number" v-model="q" />) <input class="inputSlider" type="range" min="0.0001" max="1000" v-model="q" step="0.0001" /><br />
+
+            <sound-comp v-bind:soundobject="soundObj1"></sound-comp>
+            <sound-comp v-bind:soundobject="soundObj2"></sound-comp>
+        </div>
+    </body>
+    <script src="/node_modules/vue/dist/vue.js"></script>
+    <script src="/library/BufferLoader.js"></script>
+    <script src="/library/SourceFactory.js"></script>
+    <script src="/library/SoundManageComponent.js"></script>
+    <script src="/library/SampleSoundManageComponent.js"></script>
+    <script src="init.js"></script>
+    <script src="initVue.js"></script>
+</html>

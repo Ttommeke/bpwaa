@@ -1,0 +1,21 @@
+{
+  "name": "bpwaa",
+  "version": "1.0.0",
+  "description": "Bachlorpaper about WebAudio API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/Ttommeke/bpwaa.git"
+  },
+  "author": "Tom Valkeneers",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Ttommeke/bpwaa#readme",
+  "dependencies": {
+    "connect": "^3.6.0",
+    "serve-static": "^1.12.0",
+    "vue": "^2.2.1"
+  }
+}

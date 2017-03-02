@@ -1,0 +1,33 @@
+https://www.html5rocks.com/en/tutorials/webaudio/intro/ - tutorial voor Web Audio API getting started
+
+Volledig door lopen.
+Voor het eenvoudig op te halen van geluid, heb ik gebruik gemaakt van de BufferLoader class.
+Deze classes heb ik gevonden in een link horende bij dit artikel. Onder de titel: Abstracting the Web Audio API
+
+Het is nu eenvoudig om buffers in te laden. Deze kunnen slechts 1 malig worden afgespeeld.
+Daarmee heb ik een SoundFactory classe aangemaakt waarmee het zeer eenvoudig is meerdere bufferedSources aan te maken.
+
+de tijd die je mee geeft aan een geluid bij het starten van de bron is de tijd wanneer deze begint te spelen.
+
+
+
+Voor de Gain Node maak ik gebruik van een osculaire bron om continu audio te krijgen.
+
+
+Om meerdere geluidsbronnen samen te voegen kunnen deze allemaal aan dezelfde node worden gekoppeld.
+Bijvoorbeeld een gain node. Daarmee kan dan deze in 1 keer als master volume worden aangepast.
+Wanneer dit wordt gedaan, worden de geluidssignalen simple weg bij elkaar op geteld.
+Met andere woorden, 2 sinus vormige geluidsbronnen met dezelfde fequentie die op het zelfde moment beginnen is hetzelfde als 1 sinus vormige bron verdubbelen met een GainNode.
+
+
+detune is het vertragen of versnellen van de geluidsbron. uitgedrukt in cents
+https://en.wikipedia.org/wiki/Cent_%28music%29
+
+
+
+hoop nuttige weetjes
+https://developers.google.com/web/updates/2012/01/Web-Audio-FAQ
+zoals waarom er bij elke playback een nieuwe AudioSource moet worden gecreeerd.
+
+detune vs playbackrate
+stackoverflow.com/questions/36035007/web-audio-audiobuffersourcenode-detune-vs-playbackrate

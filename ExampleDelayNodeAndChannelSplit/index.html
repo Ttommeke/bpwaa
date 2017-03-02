@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <title>Soundplay ground</title>
+        <link rel="stylesheet" type="text/css" href="/style/base.css">
+    </head>
+    <body>
+        <div id="app">
+            <h1>Master control delay on left channel</h1>
+            delay (currently: <input type="number" v-model="delay" />) <input class="inputSlider" type="range" min="0" max="2" v-model="delay" step="0.001" /><br />
+
+            <sample-sound-comp v-bind:soundobject="soundObj1" v-if="soundObj1 !== undefined"></sound-comp>
+        </div>
+    </body>
+    <script src="/node_modules/vue/dist/vue.js"></script>
+    <script src="/library/BufferLoader.js"></script>
+    <script src="/library/SourceFactory.js"></script>
+    <script src="/library/SoundManageComponent.js"></script>
+    <script src="/library/SampleSoundManageComponent.js"></script>
+    <script src="init.js"></script>
+    <script src="initVue.js"></script>
+</html>

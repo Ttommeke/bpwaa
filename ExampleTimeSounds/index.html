@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>First test</title>
+    </head>
+    <body>
+        <div id="app">
+            <span v-if="soundsLoaded">Loaded</span><span v-if="!soundsLoaded">Loading...</span>
+        </div>
+    </body>
+    <script src="/node_modules/vue/dist/vue.js"></script>
+    <script src="/library/BufferLoader.js"></script>
+    <script src="/library/SourceFactory.js"></script>
+    <script src="init.js"></script>
+    <script src="initVue.js"></script>
+</html>

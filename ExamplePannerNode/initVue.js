@@ -13,10 +13,8 @@ var app = new Vue({
         oscillator.connect(panner);
         oscillator.start(0);
 
-        context.listener.setPosition(150,0,150);
-        panner.setPosition(100,0,200);
-
-        console.log(context.listener.speedOfSound);
+        context.listener.setPosition(30,0,30);
+        panner.setPosition(10,0,15);
 
         return {
             panner: panner,
@@ -24,7 +22,7 @@ var app = new Vue({
     },
     methods: {
         soundMoved: function(x,z) {
-            this.panner.setPosition(x,0,z);
+            this.panner.setPosition(x/10,0,z/10);
         }
     }
 })

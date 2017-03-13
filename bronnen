@@ -31,3 +31,17 @@ zoals waarom er bij elke playback een nieuwe AudioSource moet worden gecreeerd.
 
 detune vs playbackrate
 stackoverflow.com/questions/36035007/web-audio-audiobuffersourcenode-detune-vs-playbackrate
+
+start binaural audio
+http://blog.kaistale.com/?p=1428
+
+
+plugin binaural audio
+https://github.com/Ircam-RnD/binauralFIR
+Example:
+http://ircam-rnd.github.io/binauralFIR/examples/
+
+
+
+INTERESTING TO READ
+https://codeandsound.wordpress.com/2015/04/08/implementing-binaural-hrtf-panner-node-with-web-audio-api/

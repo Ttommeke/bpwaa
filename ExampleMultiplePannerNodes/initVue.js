@@ -29,12 +29,6 @@ var app = new Vue({
     mounted: function() {
         var that = this;
 
-        var soundTypes = [];
-
-        for (var i = 0; i < soundTypes.length; i++) {
-            this.addSound(soundTypes[i]);
-        }
-
         bufferLoader = new BufferLoader(
             context,
             [
@@ -70,7 +64,7 @@ var app = new Vue({
             panner.connect(this.gaincontrol.masterGain);
 
             oscillator.start(0);
-            
+
             this.soundObjects.push({ "panner": panner, "source": oscillator, "gainnode": gainNode, name: "Sound " + type, sampleSound: false });
         },
         addSMSSoundLoop : function() {

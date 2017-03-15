@@ -45,3 +45,15 @@ http://ircam-rnd.github.io/binauralFIR/examples/
 
 INTERESTING TO READ
 https://codeandsound.wordpress.com/2015/04/08/implementing-binaural-hrtf-panner-node-with-web-audio-api/
+
+Dopler effect
+https://bugs.chromium.org/p/chromium/issues/detail?id=439644
+https://bugzilla.mozilla.org/show_bug.cgi?id=1148354
+https://github.com/WebAudio/web-audio-api/issues/455
+https://github.com/WebAudio/web-audio-api/issues/372
+
+Why StereoPanner and panner exists!
+https://github.com/WebAudio/web-audio-api/issues/372
+
+Possible SpatialNode
+https://github.com/WebAudio/web-audio-api/issues/455

@@ -79,6 +79,7 @@ var app = new Vue({
             panner.coneInnerAngle = 360;
             panner.coneOuterAngle = 0;
             panner.coneOuterGain = 0;
+            panner.forwardX.value = -1
             gainNode.connect(panner);
             panner.connect(this.gaincontrol.masterGain);
 

@@ -44,7 +44,7 @@ var app = new Vue({
         bufferLoader = new BufferLoader(
             context,
             [
-                { href: '../sounds/sms.wav', name: 'sms' }
+                { href: '/sounds/sms.wav', name: 'sms' }
             ],
             function(sounds) {
                 sms = sounds.sms;

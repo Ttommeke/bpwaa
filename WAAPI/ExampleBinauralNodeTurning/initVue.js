@@ -1,3 +1,13 @@
+var calculateXAndZ = function(angle, distance) {
+    var sin = Math.sin(-angle/180*Math.PI);
+    var cos = Math.cos(angle/180*Math.PI);
+
+    var z = cos * distance;
+    var x = sin * distance;
+
+    return {x: -x, z: -z};
+}
+
 var app = new Vue({
     el: '#app',
     data: function() {
@@ -12,6 +22,8 @@ var app = new Vue({
 
         return {
             binauralNode: binauralNode,
+            x: 0,
+            z: 0
         };
     },
     mounted: function() {
@@ -20,7 +32,7 @@ var app = new Vue({
         bufferLoader = new BufferLoader(
             context,
             [
-                { href: '../sounds/sms.wav', name: 'sms' }
+                { href: '/sounds/sms.wav', name: 'sms' }
             ],
             function(sounds) {
                 sms = sounds.sms;
@@ -30,6 +42,23 @@ var app = new Vue({
                 smsSound.loopEnd = 1;
                 smsSound.start(0);
                 smsSound.connect(that.binauralNode.input);
+
+                var startCorner = -180;
+
+                setInterval(function(){
+                    startCorner += 0.1;
+                    var distance = that.binauralNode.getPosition().distance;
+
+                    if (startCorner > 180) {
+                        startCorner = -179;
+                    }
+
+                    var position = calculateXAndZ(startCorner,150);
+                    that.x = 300 + Math.round(position.x);
+                    that.z = 300 + Math.round(position.z);
+
+                    that.binauralNode.setPosition(startCorner,0,distance);
+                }, 10);
             }
         );
 

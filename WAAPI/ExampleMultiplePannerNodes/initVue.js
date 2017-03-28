@@ -32,7 +32,7 @@ var app = new Vue({
         bufferLoader = new BufferLoader(
             context,
             [
-                { href: '../sounds/sms.wav', name: 'sms' }
+                { href: '/sounds/sms.wav', name: 'sms' }
             ],
             function(sounds) {
                 sms = sounds.sms;
@@ -56,7 +56,6 @@ var app = new Vue({
             var gainNode = context.createGain();
             oscillator.connect(gainNode);
             var panner = context.createPanner();
-            panner.panningModel = 'HRTF';
             panner.maxDistance = 150;
             panner.coneInnerAngle = 360;
             panner.coneOuterAngle = 0;
@@ -74,12 +73,10 @@ var app = new Vue({
             var gainNode = context.createGain();
             smsSound.connect(gainNode);
             var panner = context.createPanner();
-            panner.panningModel = 'HRTF';
             panner.maxDistance = 150;
             panner.coneInnerAngle = 360;
             panner.coneOuterAngle = 0;
             panner.coneOuterGain = 0;
-            panner.forwardX.value = -1
             gainNode.connect(panner);
             panner.connect(this.gaincontrol.masterGain);
 

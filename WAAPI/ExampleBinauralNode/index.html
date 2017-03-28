@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Soundplay ground</title>
+        <link rel="stylesheet" type="text/css" href="/style/base.css">
+    </head>
+    <body>
+        <div id="app">
+            <h1>Master control Binaural</h1>
+            <sound-location-comp @soundmoved="soundMoved"></sound-location-comp>
+        </div>
+    </body>
+    <script src="/non_npm_dependencies/binaural-fir.min.js"></script>
+    <script src="/non_npm_dependencies/complete_hrtfs.js"></script>
+    <script src="/node_modules/vue/dist/vue.js"></script>
+    <script src="/library/BufferLoader.js"></script>
+    <script src="/library/SourceFactory.js"></script>
+    <script src="/library/SoundLocationComponent.js"></script>
+    <script src="init.js"></script>
+    <script src="initVue.js"></script>
+</html>

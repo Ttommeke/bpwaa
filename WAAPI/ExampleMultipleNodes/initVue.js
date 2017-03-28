@@ -5,7 +5,6 @@ var app = new Vue({
     data: function() {
         var masterGain = context.createGain();
         masterGain.connect(context.destination);
-        context.listener.setPosition(30,0,30);
 
         return {
             soundObjects: [],
@@ -29,10 +28,16 @@ var app = new Vue({
     mounted: function() {
         var that = this;
 
+        var soundTypes = [];
+
+        for (var i = 0; i < soundTypes.length; i++) {
+            this.addSound(soundTypes[i]);
+        }
+
         bufferLoader = new BufferLoader(
             context,
             [
-                { href: '../sounds/sms.wav', name: 'sms' }
+                { href: '/sounds/sms.wav', name: 'sms' }
             ],
             function(sounds) {
                 sms = sounds.sms;
@@ -54,35 +59,23 @@ var app = new Vue({
             var oscillator = context.createOscillator();
             oscillator.type = type;
             var gainNode = context.createGain();
+
             oscillator.connect(gainNode);
-            var panner = context.createPanner();
-            panner.maxDistance = 150;
-            panner.coneInnerAngle = 360;
-            panner.coneOuterAngle = 0;
-            panner.coneOuterGain = 0;
-            gainNode.connect(panner);
-            panner.connect(this.gaincontrol.masterGain);
+            this.soundObjects.push({ "source": oscillator, "gainnode": gainNode, name: "Sound " + type, sampleSound: false });
+            gainNode.connect(this.gaincontrol.masterGain);
 
             oscillator.start(0);
-
-            this.soundObjects.push({ "panner": panner, "source": oscillator, "gainnode": gainNode, name: "Sound " + type, sampleSound: false });
         },
         addSMSSoundLoop : function() {
             var smsSound = sms.createBufferSource();
             smsSound.loop = true;
             var gainNode = context.createGain();
             smsSound.connect(gainNode);
-            var panner = context.createPanner();
-            panner.maxDistance = 150;
-            panner.coneInnerAngle = 360;
-            panner.coneOuterAngle = 0;
-            panner.coneOuterGain = 0;
-            gainNode.connect(panner);
-            panner.connect(this.gaincontrol.masterGain);
+            gainNode.connect(this.gaincontrol.masterGain);
 
             smsSound.start(0);
 
-            this.soundObjects.push({ "panner": panner, "source": smsSound, "gainnode": gainNode, name: "SMS sound", sampleSound: true });
+            this.soundObjects.push({ "source": smsSound, "gainnode": gainNode, name: "SMS sound", sampleSound: true });
         }
     }
 })

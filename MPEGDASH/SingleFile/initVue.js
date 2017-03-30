@@ -6,19 +6,17 @@ var app = new Vue({
 
         return {
             loadingMPDFile : true,
-            stream : []
+            periods : []
         };
     },
     mounted: function() {
-        var options = {
-            headers: {
-                "Accept": "text/xml"
-            }
-        };
+        var that = this;
 
         sr.mpdParser('/MPEGDASH/mpdtest1/testSingle.mpd')
         .then(function(mpd) {
+
             console.log(mpd);
+            that.periods = mpd.manifestInfo.periodInfos;
         	// Inspect, work with parsed object.
         });
     },

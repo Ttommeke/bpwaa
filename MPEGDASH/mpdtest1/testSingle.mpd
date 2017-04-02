@@ -1,7 +1,7 @@
 <MPD xmlns="urn:mpeg:DASH:schema:MPD:2011" mediaPresentationDuration="PT0H3M1.63S" minBufferTime="PT1.5S" profiles="urn:mpeg:dash:profile:isoff-on-demand:2011" type="static">
     <Period duration="PT0H3M1.63S" start="PT0S">
-        <AdaptationSet>
-            <ContentComponent contentType="audio" id="1" />
+        <AdaptationSet id="audioSource1">
+            <ContentComponent contentType="audio" />
             <Representation bandwidth="127236" codecs="mp4a.40.2" id="6" mimeType="audio/mp4" numChannels="2" sampleRate="44100">
                 <BaseURL>/MPEGDASH/mpdtest1/single1.wav</BaseURL>
                 <SegmentBase indexRange="592-851">

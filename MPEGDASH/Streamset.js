@@ -28,6 +28,31 @@ Streamset.prototype.isReadyToPlay = function () {
     return true;
 };
 
+Streamset.prototype.setTime = function(timePast, totaltime) {
+    var frameCount = this.audioContext.sampleRate * totaltime;
+    var channels = 2;
+    var newAudioBuffer = this.audioContext.createBuffer(channels, frameCount, this.audioContext.sampleRate);
+
+    var startPosition = Math.round(frameCount * timePast / totaltime);
+
+    for (var channel = 0; channel < channels; channel++) {
+        var anotherArray = new Float32Array(frameCount);
+        this.buffer.copyFromChannel(anotherArray,channel);
+        anotherArray.slice(0,startPosition);
+
+
+        newAudioBuffer.copyToChannel(anotherArray, channel);
+    }
+
+    this.audioBuffer.disconnect();
+
+    this.audioBuffer = this.audioContext.createBufferSource();
+    this.audioBuffer.buffer = newAudioBuffer;
+    this.audioBuffer.connect(this.audioContext.destination);
+
+    this.audioBuffer.start();
+};
+
 Streamset.prototype.play = function() {
     if (this.active && this.loaded) {
         this.audioBuffer = this.audioContext.createBufferSource();

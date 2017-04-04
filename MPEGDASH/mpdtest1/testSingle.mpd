@@ -1,5 +1,5 @@
-<MPD xmlns="urn:mpeg:DASH:schema:MPD:2011" mediaPresentationDuration="PT0H3M1.63S" minBufferTime="PT1.5S" profiles="urn:mpeg:dash:profile:isoff-on-demand:2011" type="static">
-    <Period duration="PT0H3M1.63S" start="PT0S">
+<MPD xmlns="urn:mpeg:DASH:schema:MPD:2011" mediaPresentationDuration="PT0H0M10S" minBufferTime="PT1.5S" profiles="urn:mpeg:dash:profile:isoff-on-demand:2011" type="static">
+    <Period duration="PT0H0M10S" start="PT0S">
         <AdaptationSet id="audioSource1">
             <ContentComponent contentType="audio" />
             <Representation bandwidth="127236" codecs="mp4a.40.2" id="6" mimeType="audio/mp4" numChannels="2" sampleRate="44100">
@@ -12,7 +12,7 @@
         <AdaptationSet id="audioSource2">
             <ContentComponent contentType="audio" />
             <Representation bandwidth="127236" codecs="mp4a.40.2" id="6" mimeType="audio/mp4" numChannels="2" sampleRate="44100">
-                <BaseURL>/MPEGDASH/mpdtest1/single2.wav</BaseURL>
+                <BaseURL>/MPEGDASH/mpdtest1/Zombie_Horde.mp3</BaseURL>
                 <SegmentBase indexRange="592-851">
                     <Initialization range="0-591" />
                 </SegmentBase>

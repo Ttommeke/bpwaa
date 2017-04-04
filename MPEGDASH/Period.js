@@ -8,6 +8,33 @@ var Period = function(period, audioContext) {
     this.audioContext = audioContext;
     this.streamsets = this.parseStreamsets(period);
     this.status = Status.STOPPED;
+    this.duration = period.duration;
+
+    this.timePast = 0;
+    this.startTime = 0;
+
+    var that = this;
+
+    this.updateInterval = setInterval(function() {
+        if (that.status == Status.PLAYING) {
+            that.timePast = that.audioContext.currentTime - that.startTime;
+
+            if (that.timePast >= that.duration) {
+                that.stop();
+            }
+        }
+    }, 10);
+
+    console.log(period);
+};
+
+Period.prototype.setTime = function (timepast) {
+    this.timePast = timepast;
+    this.startTime = this.audioContext.currentTime - timepast;
+
+    for (var i = 0; i < this.streamsets.length; i++) {
+        this.streamsets[i].setTime(timepast, this.duration);
+    }
 };
 
 Period.prototype.parseStreamsets = function (period) {
@@ -77,6 +104,7 @@ Period.prototype.play = function () {
     var that = this;
 
     that.loadStreams().then(function() {
+        that.startTime = that.audioContext.currentTime;
         that.audioContext.resume();
 
         this.status = Status.PLAYING;

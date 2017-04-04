@@ -10,8 +10,5 @@ function InitSound() {
 
 InitSound();
 
-sr.mpdParser('/MPEGDASH/mpdtest1/testSingle.mpd').then(function(mpd) {
-
-    console.log(mpd);
-    // Inspect, work with parsed object.
-});
+var sg = createStreamGetter("/MPEGDASH/mpdtest1/testSingle.mpd");
+sg.initMpdFile();

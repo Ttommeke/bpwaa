@@ -5,12 +5,17 @@
     </head>
     <body>
         <div id="app">
-            <period-comp v-for="(period, key, index) in periods" v-bind:name="key" v-bind:period="period" v-bind:key="index"></period-comp>
+            <period-comp v-for="(period, key, index) in periods" v-bind:name="key" v-bind:period="period" v-bind:key="key"></period-comp>
         </div>
     </body>
     <script src="/node_modules/vue/dist/vue.js"></script>
     <script src="/node_modules/vue-resource/dist/vue-resource.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="/non_npm_dependencies/parser.js"></script>
+    <script type="text/javascript" src="../StreamGetter.js"></script>
+    <script type="text/javascript" src="../Stream.js"></script>
+    <script type="text/javascript" src="../Streamset.js"></script>
+    <script type="text/javascript" src="../Period.js"></script>
     <script type="text/javascript" src="PeriodComponent.js"></script>
     <script type="text/javascript" src="StreamsetComponent.js"></script>
     <script type="text/javascript" src="StreamComponent.js"></script>

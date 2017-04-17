@@ -67,3 +67,16 @@ https://github.com/google/spatial-media
 MPEG-DASH MPD file
 https://www.brendanlong.com/the-structure-of-an-mpeg-dash-mpd.html
 https://www.brendanlong.com/common-informative-metadata-in-mpeg-dash.html
+
+
+
+mp3 naar mp4
+ffmpeg -i Zombie_Horde.mp3 -sn -vn -ac 2 -threads 0 zombie_horde2.mp4
+sudo apt-get install mp4v2-utils
+mp4info
+
+
+https://www.bento4.com/developers/dash/
+downloads voor tools
+mp4fragment om te fragmenteren
+mp4dash om een dashfile enzovoort te maken

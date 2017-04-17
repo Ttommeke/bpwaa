@@ -12,7 +12,8 @@
         <AdaptationSet id="audioSource2">
             <ContentComponent contentType="audio" />
             <Representation bandwidth="127236" codecs="mp4a.40.2" id="6" mimeType="audio/mp4" numChannels="2" sampleRate="44100">
-                <BaseURL>/MPEGDASH/mpdtest1/Zombie_Horde.mp3</BaseURL>
+                <BaseURL>/MPEGDASH/mpdtest1/output/audio/und/mp4a/seg-3.m4s</BaseURL>
+                <!--BaseURL>/MPEGDASH/mpdtest1/zombie_horde2.mp4</BaseURL-->
                 <SegmentBase indexRange="592-851">
                     <Initialization range="0-591" />
                 </SegmentBase>

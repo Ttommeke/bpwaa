@@ -3,9 +3,10 @@ Vue.component('period-comp', {
         <div>
             <h2>Period {{name}} status: {{period.status}}</h2>
             <input type="range" v-model="timePast" v-bind:max="period.duration" v-bind:min="0" step="0.1"></input> {{timePast}}s / {{period.duration}}s
-            <button @click="start" v-if="period.status == Status.STOPPED || period.status == Status.PAUSED">play</button>
-            <button @click="start" v-if="period.status == Status.PLAYING">pause</button>
-            <button @click="stop" v-if="period.status !== Status.STOPPED">stop</button>
+            <button @click="load">load</button>
+            <button @click="start" v-if="period.status == PeriodStatus.STOPPED || period.status == PeriodStatus.PAUSED">play</button>
+            <button @click="start" v-if="period.status == PeriodStatus.PLAYING">pause</button>
+            <button @click="stop" v-if="period.status !== PeriodStatus.STOPPED">stop</button>
             <h3>Streams</h3>
             <streamset-comp v-for="(streamset, key) in period.streamsets" v-bind:name="key" v-bind:key="key" v-bind:streamset="streamset"></streamset-comp>
         </div>
@@ -13,7 +14,7 @@ Vue.component('period-comp', {
     "props": ["period", "name"],
     "data" : function() {
         return {
-            Status: Status
+            PeriodStatus: PeriodStatus
         };
     },
     "computed": {
@@ -27,6 +28,9 @@ Vue.component('period-comp', {
         }
     },
     "methods" : {
+        load : function() {
+            this.period.startLoadingStreamSets();
+        },
         start : function() {
             var that = this;
 

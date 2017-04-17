@@ -19,6 +19,10 @@ Adaptationset.prototype.parseRepresentations = function(adaptationset) {
     return allRepresentations;
 };
 
+Adaptationset.prototype.loadInit = function() {
+
+};
+
 Adaptationset.prototype.load = function() {
     var that = this;
 

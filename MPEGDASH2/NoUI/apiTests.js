@@ -7,17 +7,11 @@ request.responseType = "arraybuffer";
 
 
 function concatTypedArrays(a, b) { // a, b TypedArray of same type
-    var c = new ArrayBuffer(a.byteLength + b.byteLength);
 
-    for (var i = 0; i < a.byteLength; i++) {
-        c.buffer[i] = a.buffer[i];
-    }
-    for (var i = 0; i < b.byteLength; i++) {
-        c.buffer[a.byteLength + i] = b.buffer[i];
-    }
-    console.log(c.buffer);
-
-    return c;
+    var tmp = new Uint8Array(a.byteLength + b.byteLength);
+    tmp.set(new Uint8Array(a), 0);
+    tmp.set(new Uint8Array(b), a.byteLength);
+    return tmp.buffer;
 }
 
 
@@ -26,7 +20,7 @@ request.onload = function() {
     var initMP4 = request.response;
 
     var request2 = new XMLHttpRequest();
-    request2.open("GET", "/MPEGDASH/mpdtest1/output/audio/und/mp4a/seg-1.m4s", true);
+    request2.open("GET", "/MPEGDASH/mpdtest1/output/audio/und/mp4a/seg-2.m4s", true);
     request2.responseType = "arraybuffer";
 
     request2.onload = function() {

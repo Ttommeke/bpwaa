@@ -3,11 +3,19 @@ var Adaptationset = function(adaptationset, audioContext) {
     this.id = adaptationset.id;
     this.contentType = adaptationset.contentType;
     this.representations = this.parseRepresentations(adaptationset);
-    this.activeStreamIndex = 0;
+    this.activeRepresentation = 0;
     this.channels = [];
 
     this.audioContext = audioContext;
 };
+
+function concatTypedArrays(a, b) { // a, b TypedArray of same type
+
+    var tmp = new Uint8Array(a.byteLength + b.byteLength);
+    tmp.set(new Uint8Array(a), 0);
+    tmp.set(new Uint8Array(b), a.byteLength);
+    return tmp.buffer;
+}
 
 Adaptationset.prototype.parseRepresentations = function(adaptationset) {
     var allRepresentations = [];
@@ -19,40 +27,46 @@ Adaptationset.prototype.parseRepresentations = function(adaptationset) {
     return allRepresentations;
 };
 
-Adaptationset.prototype.loadInit = function() {
-
-};
-
-Adaptationset.prototype.load = function() {
+Adaptationset.prototype.loadNext = function() {
     var that = this;
 
-    if (that.representations.length > that.activeStreamIndex) {
+    return new Promise(function(resolve, reject) {
+        var activeRep = that.representations[that.activeRepresentation];
+        activeRep.loadNextSegment().then(function(representationReady) {
+            var typedArray = concatTypedArrays(representationReady.getInitdata(), representationReady.getLastSegment());
 
-        var url = that.representations[that.activeStreamIndex].url;
+            return that.parseAudioData(typedArray);
+        }).then(function() {
+            resolve(that);
+        }).catch(function() {
+            reject();
+        });
+    });
+};
 
-        var request = new XMLHttpRequest();
-        request.open("GET", url, true);
-        request.responseType = "arraybuffer";
+Adaptationset.prototype.parseAudioData = function(audioData) {
+    var that = this;
 
-        request.onload = function() {
-            that.audioContext.decodeAudioData(request.response, function(streamDecoded) {
-                for (var i = 0; i < streamDecoded.numberOfChannels; i++) {
-                    var channelData = streamDecoded.getChannelData(i);
+    return new Promise(function(resolve, reject) {
+        that.audioContext.decodeAudioData(audioData, function(streamDecoded) {
+            for (var i = 0; i < streamDecoded.numberOfChannels; i++) {
+                var channelData = streamDecoded.getChannelData(i);
 
-                    var monoAudioStream = that.channels[i];
+                var monoAudioStream = that.channels[i];
 
-                    if (monoAudioStream == undefined) {
-                        monoAudioStream = new MonoAudioStream(that.audioContext, 0.5);
-                    }
-
-                    monoAudioStream.addAudioData(channelData);
-                    var monoAudioStreamPlayer = new MonoAudioStreamPlayer(that.audioContext, monoAudioStream);
-
-                    monoAudioStreamPlayer.play();
+                if (monoAudioStream == undefined) {
+                    monoAudioStream = new MonoAudioStream(that.audioContext, 0.5);
+                    that.channels[i] = monoAudioStream;
                 }
-            });
-        };
 
-        request.send();
-    }
+                monoAudioStream.addAudioData(channelData);
+            }
+
+            resolve();
+        });
+    });
+};
+
+Adaptationset.prototype.getChannels = function() {
+    return this.channels;
 };

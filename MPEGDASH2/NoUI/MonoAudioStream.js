@@ -46,7 +46,7 @@ MonoAudioStream.prototype.addAudioData = function(audioData) {
     if (dataParsed < totalLength) {
         this.notYetReadyBuffer = this.audioContext.createBuffer(1, lengthBuffer, this.audioContext.sampleRate);
         var buffer = this.notYetReadyBuffer.getChannelData(0);
-        buffer.set(audioData.slice(dataParsed, totalLength - dataParsed));
+        buffer.set(audioData.slice(dataParsed, totalLength));
 
         this.notYetReadyBufferFramesLoaded = totalLength - dataParsed;
     }

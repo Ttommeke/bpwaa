@@ -1,5 +1,4 @@
 var Period = function(period, audioContext) {
-    console.log(period);
     this.duration = period.duration;
     this.start = period.start;
     this.id = period.id;
@@ -12,7 +11,13 @@ Period.prototype.parseAdaptationsets = function (period) {
     var Adaptationsets = [];
 
     for (var i = 0; i < period.streamSetInfos.length; i++) {
-        Adaptationsets.push(new Adaptationset(period.streamSetInfos[i], this.audioContext));
+        var adaptationset = period.streamSetInfos[i];
+
+        if (adaptationset.contentType == "text") {
+            Adaptationsets.push(new AdaptationsetMetadata(adaptationset, this.audioContext));
+        } else {
+            Adaptationsets.push(new Adaptationset(adaptationset, this.audioContext));
+        }
     }
 
     return Adaptationsets;
@@ -31,8 +36,12 @@ Period.prototype.loadNextAdaptationset = function(adaptationset) {
         that.loadNextAdaptationset(adap);
     }).catch(function() {
 
-        var monoPlayer = new MonoAudioStreamPlayer(that.audioContext, adaptationset.getChannels()[0]);
-        monoPlayer.play();
+        if (adaptationset.contentType == "audio") {
+            var monoPlayer = new MonoAudioStreamPlayer(that.audioContext, adaptationset.getChannels()[0]);
+            monoPlayer.play();
+        } else {
+            
+        }
 
     });
 };

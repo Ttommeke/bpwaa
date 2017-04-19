@@ -9,14 +9,6 @@ var Adaptationset = function(adaptationset, audioContext) {
     this.audioContext = audioContext;
 };
 
-function concatTypedArrays(a, b) { // a, b TypedArray of same type
-
-    var tmp = new Uint8Array(a.byteLength + b.byteLength);
-    tmp.set(new Uint8Array(a), 0);
-    tmp.set(new Uint8Array(b), a.byteLength);
-    return tmp.buffer;
-}
-
 Adaptationset.prototype.parseRepresentations = function(adaptationset) {
     var allRepresentations = [];
 
@@ -33,7 +25,7 @@ Adaptationset.prototype.loadNext = function() {
     return new Promise(function(resolve, reject) {
         var activeRep = that.representations[that.activeRepresentation];
         activeRep.loadNextSegment().then(function(representationReady) {
-            var typedArray = concatTypedArrays(representationReady.getInitdata(), representationReady.getLastSegment());
+            var typedArray = ArrayBufferHelper.concatTypedArrays(representationReady.getInitdata(), representationReady.getLastSegment());
 
             return that.parseAudioData(typedArray);
         }).then(function() {

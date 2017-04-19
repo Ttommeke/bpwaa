@@ -1,5 +1,6 @@
 var Representation = function(representation) {
     this.id = representation.id;
+    this.mimeType = representation.mimeType;
     this.bandwidth = representation.bandwidth;
     this.isLoading = false;
 
@@ -26,6 +27,14 @@ Representation.prototype.parseSegmentUrls = function (representation) {
     return segmentUrls;
 };
 
+Representation.prototype.getResponseType = function() {
+    if (this.mineType == "application/json") {
+        return "json";
+    } else {
+        return "arraybuffer";
+    }
+};
+
 Representation.prototype.loadNextSegment = function() {
     var that = this;
 
@@ -36,7 +45,7 @@ Representation.prototype.loadNextSegment = function() {
 
             var request = new XMLHttpRequest();
             request.open("GET", that.segmentUrls[that.segmentsLoaded], true);
-            request.responseType = "arraybuffer";
+            request.responseType = that.getResponseType();
 
             request.onload = function() {
                 that.segments[that.segmentsLoaded] = request.response;

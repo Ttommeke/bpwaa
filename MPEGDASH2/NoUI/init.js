@@ -3,7 +3,9 @@ var mpdPeriods = [];
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
 
-sr.mpdParser('/MPEGDASH/mpdtest1/output/stream.mpd').then(function(mpd) {
+sr.mpdParser('/MPEGDASH2/song/output/stream.mpd').then(function(mpd) {
+
+    console.log(mpd);
 
     mpdObject = mpd;
 

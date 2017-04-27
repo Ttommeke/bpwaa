@@ -11,20 +11,21 @@ MonoAudioStream.prototype.getAudioBuffers = function() {
     return this.audioBuffers;
 };
 
+MonoAudioStream.prototype.getAudioBuffer = function(index) {
+    return this.audioBuffers[index];
+};
+
 MonoAudioStream.prototype.addAudioData = function(audioData) {
     var totalLength = audioData.length;
     var dataParsed = 0;
     var lengthBuffer = this.audioContext.sampleRate * this.bufferDuration;
 
     if (this.notYetReadyBuffer !== undefined) {
-        if (totalLength < lengthBuffer - this.notYetReadyBufferFramesLoaded) {
-            var buffer = this.notYetReadyBuffer.getChannelData(0);
-            var newNotYetReadyBuffer = ArrayBufferHelper.concatTypedArraysFloat32(buffer.slice(0, this.notYetReadyBufferFramesLoaded), audioData.slice(0, audioData.length));
+        if (totalLength < lengthBuffer - this.notYetReadyBuffer.length) {
+            var newNotYetReadyBuffer = ArrayBufferHelper.concatTypedArraysFloat32(this.notYetReadyBuffer, audioData);
 
-            this.notYetReadyBuffer.copyToChannel(newNotYetReadyBuffer, 0, 0);
-
-            this.notYetReadyBufferFramesLoaded += audioData.length;
-            dataParsed = audioData.length;
+            this.notYetReadyBuffer = newNotYetReadyBuffer;
+            dataParsed = totalLength;
         } else {
             var newBuffer = ArrayBufferHelper.concatTypedArraysFloat32(this.notYetReadyBuffer, audioData.slice(0, lengthBuffer - this.notYetReadyBuffer.length));
 

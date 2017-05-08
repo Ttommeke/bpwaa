@@ -9,12 +9,12 @@
         <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
       </Representation>
     </AdaptationSet>
-    <!-- <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1">
+    <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1">
       <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
       <Representation audioSamplingRate="44100" bandwidth="132412" codecs="mp4a.40.2" id="audio/und/ff">
         <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
       </Representation>
-    </AdaptationSet> -->
+    </AdaptationSet>
 
   </Period>
 </MPD>

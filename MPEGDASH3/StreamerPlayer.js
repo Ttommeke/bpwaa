@@ -1,16 +1,25 @@
-var StreamerPlayer = function(stream) {
+var StreamerPlayer = function(stream, audioContext, destination) {
     this.stream = stream;
-    window.AudioContext = window.AudioContext || window.webkitAudioContext;
-    this.audioContext = new AudioContext();
+    this.audioContext = audioContext;
+    this.pannerNode = this.audioContext.createPanner();
+    this.pannerNode.panningModel = 'HRTF';
+    this.pannerNode.distanceModel = 'inverse';
+    this.pannerNode.refDistance = 1;
+    this.pannerNode.maxDistance = 10000;
+    this.pannerNode.rolloffFactor = 1;
+    this.pannerNode.coneInnerAngle = 360;
+    this.pannerNode.coneOuterAngle = 0;
+    this.pannerNode.coneOuterGain = 0;
 
     this.source = this.audioContext.createMediaElementSource(stream.getAudioElement());
-    var stereopanner = this.audioContext.createStereoPanner();
-    stereopanner.pan.value = -0.5;
-    stereopanner.connect(this.audioContext.destination);
-    this.source.connect(stereopanner);
+    this.pannerNode.connect(destination);
+    this.source.connect(this.pannerNode);
+};
+
+StreamerPlayer.prototype.getPannerNode = function() {
+    return this.pannerNode;
 };
 
 StreamerPlayer.prototype.play = function(){
-
     this.stream.getAudioElement().play();
-}
+};

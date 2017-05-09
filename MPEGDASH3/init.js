@@ -14,10 +14,25 @@ var streamReady = function(stream) {
     });
 };
 
+var metaDataStreamReady = function(stream) {
+
+    stream.getNextSegment().then(function() {
+        metaDataStreamReady(stream);
+    });
+};
+
+var metaDataStreamer = new MetaDataStreamer( "/MPEGDASH2/song/output/metadata/am/init.json", "/MPEGDASH2/song/output/metadata/am/seg-$Number$.json", "metaFirst", metaDataStreamReady);
+
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+var audioContext = new AudioContext();
 var streamPlayer = null;
 var streamy = new Streamer(initUrl, representationUrl, "first", function(stream) {
-    streamPlayer = new StreamerPlayer(stream);
+    streamPlayer = new StreamerPlayer(stream, audioContext, audioContext.destination);
+    streamPlayer.getPannerNode().setPosition(0,0,1);
     streamPlayer.play();
+
+    var metaDataStreamerPlayer = new MetaDataStreamerPlayer(streamy, streamPlayer, metaDataStreamer, audioContext);
+    metaDataStreamerPlayer.play();
 
     streamReady(stream);
 });

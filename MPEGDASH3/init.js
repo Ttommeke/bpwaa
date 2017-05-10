@@ -11,6 +11,7 @@ var streamReady = function(stream) {
 
     stream.getNextSegment().then(function() {
         streamReady(stream);
+        //console.log(stream.sourceBuffer.mode);
     });
 };
 
@@ -21,7 +22,12 @@ var metaDataStreamReady = function(stream) {
     });
 };
 
+getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
+    console.log(mpd);
+});
+
 var metaDataStreamer = new MetaDataStreamer( "/MPEGDASH2/song/output/metadata/am/init.json", "/MPEGDASH2/song/output/metadata/am/seg-$Number$.json", "metaFirst", metaDataStreamReady);
+var masterPlayer = new MasterPlayer();
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 var audioContext = new AudioContext();
@@ -31,8 +37,12 @@ var streamy = new Streamer(initUrl, representationUrl, "first", function(stream)
     streamPlayer.getPannerNode().setPosition(0,0,1);
     streamPlayer.play();
 
-    var metaDataStreamerPlayer = new MetaDataStreamerPlayer(streamy, streamPlayer, metaDataStreamer, audioContext);
+    var metaDataStreamerPlayer = new MetaDataStreamerPlayer(streamPlayer, metaDataStreamer, audioContext, function(callbackEvent){});
     metaDataStreamerPlayer.play();
+
+    masterPlayer.streamerPlayers.push(streamPlayer);
+    masterPlayer.streamerPlayers.push(metaDataStreamerPlayer);
+    masterPlayer.play();
 
     streamReady(stream);
 });

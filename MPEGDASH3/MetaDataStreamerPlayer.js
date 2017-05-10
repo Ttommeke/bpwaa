@@ -1,21 +1,22 @@
-var MetaDataStreamerPlayer = function(streamer, streamerPlayer, metaDataStreamer, audioContext) {
+var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioContext, onUpdateCallback) {
     this.audioContext = audioContext;
     this.metaDataStreamer = metaDataStreamer;
     this.streamerPlayer = streamerPlayer;
-    this.streamer = streamer;
+    this.onUpdateCallback = onUpdateCallback;
+    this.interval = undefined;
 };
 
 MetaDataStreamerPlayer.prototype.play = function () {
     var that = this;
 
-    setInterval(function() {
-        var currentTime = that.streamer.getAudioElement().currentTime;
+    this.interval = setInterval(function() {
+        var currentTime = that.streamerPlayer.getCurrentTime();
 
         var before = that.getMetaDataBefore(currentTime);
 
         var after = that.getMetaDataAfter(currentTime);
 
-        var deltaT = after.moment - before.moment;
+        var deltaT = after.moment - before.moment + 0.0000001;
         var deltaBefore = currentTime - before.moment;
         var deltaAfter = after.moment - currentTime;
 
@@ -23,11 +24,15 @@ MetaDataStreamerPlayer.prototype.play = function () {
         var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
         var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
 
-        console.log(x,y,z);
-
         that.streamerPlayer.getPannerNode().setPosition(x,y,z);
 
+        that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, init: metaDataStreamer.initData });
+
     }, 50);
+};
+
+MetaDataStreamerPlayer.prototype.pause = function() {
+    clearInterval(this.interval);
 };
 
 MetaDataStreamerPlayer.prototype.getMetaDataBefore = function (currentTime) {
@@ -39,7 +44,7 @@ MetaDataStreamerPlayer.prototype.getMetaDataBefore = function (currentTime) {
         }
     }
 
-    return this.MetaDataStreamer.initData;
+    return this.metaDataStreamer.initData;
 };
 
 MetaDataStreamerPlayer.prototype.getMetaDataAfter = function (currentTime) {
@@ -51,5 +56,5 @@ MetaDataStreamerPlayer.prototype.getMetaDataAfter = function (currentTime) {
         }
     }
 
-    return this.MetaDataStreamer.initData;
+    return this.metaDataStreamer.initData;
 };

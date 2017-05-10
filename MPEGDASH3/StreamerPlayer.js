@@ -23,3 +23,11 @@ StreamerPlayer.prototype.getPannerNode = function() {
 StreamerPlayer.prototype.play = function(){
     this.stream.getAudioElement().play();
 };
+
+StreamerPlayer.prototype.pause = function(){
+    this.stream.getAudioElement().pause();
+};
+
+StreamerPlayer.prototype.getCurrentTime = function(){
+    return this.stream.getAudioElement().currentTime;
+};

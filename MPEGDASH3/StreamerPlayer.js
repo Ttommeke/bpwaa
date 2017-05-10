@@ -10,6 +10,7 @@ var StreamerPlayer = function(stream, audioContext, destination) {
     this.pannerNode.coneInnerAngle = 360;
     this.pannerNode.coneOuterAngle = 0;
     this.pannerNode.coneOuterGain = 0;
+    this.pannerNode.setPosition(2,0,0);
 
     this.source = this.audioContext.createMediaElementSource(stream.getAudioElement());
     this.pannerNode.connect(destination);

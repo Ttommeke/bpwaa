@@ -1,5 +1,7 @@
-var Streamer = function(initUrl, segmentUrl, name, onReadyCallBack) {
+var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     var that = this;
+
+    this.name = shakaAdaptionSet.id;
 
     this.mediaSource = new MediaSource();
     this.segmentsLoaded = 0;
@@ -10,16 +12,34 @@ var Streamer = function(initUrl, segmentUrl, name, onReadyCallBack) {
     that.audioElement.src = URL.createObjectURL(that.mediaSource);
 
     that.mediaSource.addEventListener('sourceopen', function() {
-        that.addRepresentation(initUrl, segmentUrl, 100, function() {
-            onReadyCallBack(that);
-        });
+
+        var totalRepresentationsParsed = 0;
+        var totalRepresentationsToParse = shakaAdaptionSet.streamInfos.length;
+
+        for (var i = 0; i < totalRepresentationsToParse; i++) {
+
+            that.addRepresentation(shakaAdaptionSet.streamInfos[i]).then(function() {
+                totalRepresentationsParsed++;
+
+                if (totalRepresentationsParsed >= totalRepresentationsToParse) {
+                    onReadyCallBack(that);
+                }
+            });
+        }
+
     });
 };
 
-Streamer.prototype.addRepresentation = function(initUrl, segmentUrl, bandwidth, callback) {
-    var sourceBuffer = this.mediaSource.addSourceBuffer('audio/mp4');
+Streamer.prototype.addRepresentation = function(shakaRepresentation) {
+    var that = this;
 
-    this.representations.push(new Representation(sourceBuffer, initUrl, segmentUrl, bandwidth, callback));
+    return new Promise(function(resolve, reject) {
+        var sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
+
+        that.representations.push(new Representation(sourceBuffer, shakaRepresentation, function() {
+            resolve();
+        }));
+    });
 };
 
 Streamer.prototype.getNextSegment = function() {
@@ -31,6 +51,8 @@ Streamer.prototype.getNextSegment = function() {
             that.segmentsLoaded++;
 
             resolve(that);
+        }).catch(function() {
+            reject();
         });
     });
 };

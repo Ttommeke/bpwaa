@@ -1,0 +1,27 @@
+[
+    {
+        "x": 7,
+        "y": 0,
+        "z": 5,
+        "movementType": "lineair",
+        "moment": 200
+    },{
+        "x": 7,
+        "y": 0,
+        "z": 7,
+        "movementType": "lineair",
+        "moment": 210
+    },{
+        "x": 5,
+        "y": 0,
+        "z": 7,
+        "movementType": "lineair",
+        "moment": 220
+    },{
+        "x": 5,
+        "y": 0,
+        "z": 5,
+        "movementType": "lineair",
+        "moment": 230
+    }
+]

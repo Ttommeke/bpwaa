@@ -1,9 +1,10 @@
-var MetaDataStreamer = function(initUrl, segmentUrl, name, onReadyCallBack) {
+var MetaDataStreamer = function(shakaAdaptionSet, onReadyCallBack) {
     var metaDatas = [];
-    this.initUrl = initUrl;
+    this.initUrl = shakaAdaptionSet.streamInfos[0].segmentInitializationInfo.url.getDomain() + shakaAdaptionSet.streamInfos[0].segmentInitializationInfo.url.getPath();
     this.initData = undefined;
+    this.name = shakaAdaptionSet.id;
     this.metaDatas = [];
-    this.segmentUrl = segmentUrl;
+    this.segments = shakaAdaptionSet.streamInfos[0].segmentIndex.references_;
 
     this.segmentsLoaded = 1;
 
@@ -34,14 +35,22 @@ MetaDataStreamer.prototype.getNextSegment = function () {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        var url = that.segmentUrl.replace('$Number$', that.segmentsLoaded);
+        if (that.segments.length > that.segmentsLoaded-1) {
+            var segment = that.segments[that.segmentsLoaded-1];
+            var url = segment.url.getDomain() + segment.url.getPath();
 
-        that.getData(url).then(function(data) {
-            that.segmentsLoaded++;
-            that.appendMetaData(data);
+            that.getData(url).then(function(data) {
+                that.segmentsLoaded++;
+                that.appendMetaData(data);
 
-            resolve();
-        });
+                resolve();
+            }).catch(function() {
+                reject();
+            });
+        } else {
+            reject();
+        }
+
     });
 };
 

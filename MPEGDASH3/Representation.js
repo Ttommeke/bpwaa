@@ -1,7 +1,7 @@
-var Representation = function(sourceBuffer, initUrl, segmentUrl, bandwidth, callbackWhenReady) {
-    this.initUrl = initUrl;
-    this.segmentUrl = segmentUrl;
-    this.bandwidth = bandwidth;
+var Representation = function(sourceBuffer, shakaRepresentation, callbackWhenReady) {
+    this.initUrl = shakaRepresentation.segmentInitializationInfo.url.getDomain() + shakaRepresentation.segmentInitializationInfo.url.getPath();
+    this.segments = shakaRepresentation.segmentIndex.references_;
+    this.bandwidth = shakaRepresentation.bandwidth;
 
     this.sourceBuffer = sourceBuffer;
 
@@ -26,14 +26,18 @@ Representation.prototype.getSegment = function(index) {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        var url = that.segmentUrl.replace('$Number$', index);
+        if (that.segments.length > index) {
+            var segment = that.segments[index-1];
+            var url = segment.url.getDomain() + segment.url.getPath();
 
-        that.getData(url).then(function(data) {
-            that.segmentsLoaded++;
-            that.appendBuffer(data);
+            that.getData(url).then(function(data) {
+                that.appendBuffer(data);
 
-            resolve();
-        });
+                resolve();
+            });
+        } else {
+            reject();
+        }
     });
 };
 

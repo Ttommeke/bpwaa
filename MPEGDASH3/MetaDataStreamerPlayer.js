@@ -1,9 +1,13 @@
-var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioContext, onUpdateCallback) {
+var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioContext) {
     this.audioContext = audioContext;
     this.metaDataStreamer = metaDataStreamer;
     this.streamerPlayer = streamerPlayer;
-    this.onUpdateCallback = onUpdateCallback;
+    this.onUpdateCallback = function(dummyEvent) {};
     this.interval = undefined;
+};
+
+MetaDataStreamerPlayer.prototype.setOnUpdateCallback = function (callback) {
+    this.onUpdateCallback = callback;
 };
 
 MetaDataStreamerPlayer.prototype.play = function () {
@@ -26,7 +30,7 @@ MetaDataStreamerPlayer.prototype.play = function () {
 
         that.streamerPlayer.getPannerNode().setPosition(x,y,z);
 
-        that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, init: metaDataStreamer.initData });
+        that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, initData: that.metaDataStreamer.initData });
 
     }, 50);
 };
@@ -36,7 +40,7 @@ MetaDataStreamerPlayer.prototype.pause = function() {
 };
 
 MetaDataStreamerPlayer.prototype.getMetaDataBefore = function (currentTime) {
-    var metaDatas = metaDataStreamer.metaDatas;
+    var metaDatas = this.metaDataStreamer.metaDatas;
 
     for (var i = 0; i < metaDatas.length - 1; i++) {
         if (metaDatas[i].moment > currentTime) {
@@ -48,7 +52,7 @@ MetaDataStreamerPlayer.prototype.getMetaDataBefore = function (currentTime) {
 };
 
 MetaDataStreamerPlayer.prototype.getMetaDataAfter = function (currentTime) {
-    var metaDatas = metaDataStreamer.metaDatas;
+    var metaDatas = this.metaDataStreamer.metaDatas;
 
     for (var i = 0; i < metaDatas.length - 1; i++) {
         if (metaDatas[i].moment > currentTime) {

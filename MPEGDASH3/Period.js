@@ -1,3 +1,6 @@
+var OUT_OF_CONTROL_THRESHOLD = 30; //30 seconden
+
+
 var Period = function(shakaPeriod, onReadyCallBack) {
     this.streams = [];
     this.metaDataStreams = [];
@@ -26,6 +29,40 @@ var Period = function(shakaPeriod, onReadyCallBack) {
     }
 };
 
+Period.prototype.startBufferProccess = function() {
+
+    var that = this;
+
+    var nextSegmentForAudio = function(stream) {
+        if (!that.isStreamRunningOutOfControl(stream)) {
+            stream.getNextSegment().then(function() {
+                nextSegmentForAudio(stream);
+            }).catch(function() {
+                console.log("Stream done");
+            });
+        } else {
+            console.log("Throtteling Stream");
+            setTimeout(function(){ nextSegmentForAudio(stream); }, 100);
+        }
+    };
+
+    var nextSegmentForMetaData = function(stream) {
+        stream.getNextSegment().then(function() {
+            nextSegmentForAudio(stream);
+        }).catch(function() {
+            console.log("MetaDataStream done");
+        });
+    };
+
+    for (var i = 0; i < this.streams.length; i++) {
+        nextSegmentForAudio(this.streams[i]);
+    }
+
+    for (var i = 0; i < this.metaDataStreams.length; i++) {
+        nextSegmentForMetaData(this.metaDataStreams[i]);
+    }
+};
+
 Period.prototype.getNextSegment = function() {
     var that = this;
 
@@ -47,6 +84,7 @@ Period.prototype.getNextSegment = function() {
         };
 
         for (var i = 0; i < that.streams.length; i++) {
+
             that.streams[i].getNextSegment().then(function() {
                 resolveFunction();
             }).catch(function() {
@@ -65,6 +103,24 @@ Period.prototype.getNextSegment = function() {
         }
     });
 };
+
+Period.prototype.isStreamRunningOutOfControl = function(stream) {
+    var that = this;
+
+    var streamThatIsBehind = that.streams[0];
+
+    for (var i = 1; i < that.streams.length; i++) {
+        if (that.streams[0].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
+            streamThatIsBehind = that.streams[0];
+        }
+    }
+
+    if (stream.getTimeBuffered() > streamThatIsBehind.getTimeBuffered() + OUT_OF_CONTROL_THRESHOLD) {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 Period.prototype.addStreamFromAdaptionSet = function(shakaAdaptionSet) {
 

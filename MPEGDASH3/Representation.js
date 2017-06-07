@@ -2,6 +2,7 @@ var Representation = function(sourceBuffer, shakaRepresentation, callbackWhenRea
     this.initUrl = shakaRepresentation.segmentInitializationInfo.url.getDomain() + shakaRepresentation.segmentInitializationInfo.url.getPath();
     this.segments = shakaRepresentation.segmentIndex.references_;
     this.bandwidth = shakaRepresentation.bandwidth;
+    this.duration = shakaRepresentation.duration;
 
     this.sourceBuffer = sourceBuffer;
 
@@ -20,6 +21,10 @@ Representation.prototype.initStream = function() {
             resolve();
         });
     });
+};
+
+Representation.prototype.getDuration = function() {
+    return this.duration;
 };
 
 Representation.prototype.getSegment = function(index) {

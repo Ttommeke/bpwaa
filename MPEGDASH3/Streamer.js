@@ -30,6 +30,23 @@ var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     });
 };
 
+Streamer.prototype.getActiveTimeRangeId = function() {
+    var timeRanges = this.audioElement.buffered;
+    return 0;
+};
+
+Streamer.prototype.getTimeBuffered = function() {
+
+    if (this.audioElement.buffered.length == 0) {
+        return 0;
+    }
+    return this.audioElement.buffered.end(this.getActiveTimeRangeId());
+};
+
+Streamer.prototype.getDuration = function() {
+    return this.representations[this.activeRepresentation].getDuration();
+};
+
 Streamer.prototype.addRepresentation = function(shakaRepresentation) {
     var that = this;
 

@@ -78,8 +78,10 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
 
     var periods = mpd.manifestInfo.periodInfos;
 
+
     var period = new Period(periods[0], function() {
-        periodSegmentReady(period);
+        //periodSegmentReady(period);
+		period.startBufferProccess();
 
         masterPlayer = new MasterPlayer(period);
 

@@ -9,16 +9,19 @@
         <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
       </Representation>
     </AdaptationSet>
+
     <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1" id="Foo Fighters">
       <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
       <Representation audioSamplingRate="44100" bandwidth="132412" codecs="mp4a.40.2" id="audio/und/ff">
         <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
       </Representation>
     </AdaptationSet>
+
     <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Arctic Monkeys_metadata">
       <SegmentTemplate duration="40000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
       <Representation bandwidth="100" id="metadata/am"></Representation>
     </AdaptationSet>
+
     <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Foo Fighters_metadata">
       <SegmentTemplate duration="40000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
       <Representation bandwidth="100" id="metadata/ff"></Representation>

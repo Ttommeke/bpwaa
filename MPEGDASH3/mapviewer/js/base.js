@@ -29,6 +29,8 @@ var render = function() {
 	renderer.render( scene, Camera.camera );
 	fpsCounter.end();
 
+	console.log(MouseSelect.whereDoesMouseLookOnDepth(5,Events.mouse.position.x,Events.mouse.position.z));
+
 	requestAnimationFrame( render );
 }
 

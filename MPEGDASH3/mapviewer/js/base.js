@@ -8,7 +8,11 @@ var fpsCounter = new Stats();
 fpsCounter.showPanel(0);
 document.body.appendChild( fpsCounter.dom );
 
+var mouseCube = Entity.createCube(0xCC0000,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));//var mouseCube =
+scene.add(mouseCube);
 var masterPlayer = undefined;
+
+var soundCubes = [];
 
 var setPositionAudioListener = function(x,y,z) {
 	if (masterPlayer != undefined) {
@@ -26,13 +30,34 @@ var render = function() {
 		Camera.moveCamera(Camera.camera, Utils.newVectorToNewVector(Player.player.position,1,Events.mouse.position), deltaTime, Camera.speed);
 	}
 
+	moveMouseCubeAndSelectSoundCube();
+
 	renderer.render( scene, Camera.camera );
 	fpsCounter.end();
 
-	console.log(MouseSelect.whereDoesMouseLookOnDepth(5,Events.mouse.position.x,Events.mouse.position.z));
+	//console.log(cubeSelected, posLookMouse, soundCubes);
+
+	//console.log(MouseSelect.whereDoesMouseLookOnDepth(5,Events.mouse.position.x,Events.mouse.position.z, Camera.camera.fov));
 
 	requestAnimationFrame( render );
-}
+};
+
+var moveMouseCubeAndSelectSoundCube = function() {
+	var posLookMouse = MouseSelect.positionWhereMouseLooksOnYAxisFromCenterPoint(0.5,Events.mouse.position,Camera.camera.position, Camera.camera.fov);
+	var cubeSelected = Entity.returnCubeFromListWhereCoordinatesAreIn(posLookMouse, soundCubes, { x: 1, y: 1, z: 1 });
+
+	soundCubes.forEach(function(soundCube) {
+		soundCube.material.color.setHex( 0x0020CC );
+	});
+
+	Utils.setXYZ(mouseCube.position, posLookMouse);
+
+	if (cubeSelected != undefined) {
+		cubeSelected.material.color.setHex( 0x99A9CC );
+	}
+};
+
+
 
 $.getJSON("map.json", function(data) {
 
@@ -88,8 +113,6 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
         masterPlayer = new MasterPlayer(period);
 
         masterPlayer.play();
-
-		var soundCubes = [];
 
 		for (var i = 0; i < masterPlayer.metaDataStreamerPlayers.length; i++) {
 			soundCubes[i] = Entity.createCube(0x0020CC,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));//function( myColor, scale, pos, rotation) {

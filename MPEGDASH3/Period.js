@@ -48,7 +48,7 @@ Period.prototype.startBufferProccess = function() {
 
     var nextSegmentForMetaData = function(stream) {
         stream.getNextSegment().then(function() {
-            nextSegmentForAudio(stream);
+            nextSegmentForMetaData(stream);
         }).catch(function() {
             console.log("MetaDataStream done");
         });

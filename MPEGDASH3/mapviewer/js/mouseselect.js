@@ -3,14 +3,20 @@ var MouseSelect = {
 
 };
 
-MouseSelect.whereDoesMouseLookOnDepth = function(depth, x, z) {
-    var biggestSide = window.innerWidth;
+MouseSelect.positionWhereMouseLooksOnYAxisFromCenterPoint = function(yDepth, posMouse, posCenterPoint, fov) {
+    var relativePosition = MouseSelect.whereDoesMouseLookOnDepth(posCenterPoint.y - yDepth, posMouse.x, posMouse.z, fov);
 
-    if (biggestSide < window.innerHeight) {
-        biggestSide = window.innerHeight;
-    }
+    return {
+        x : relativePosition.x + posCenterPoint.x,
+        y : yDepth,
+        z : relativePosition.z + posCenterPoint.z
+    };
+};
 
-    var fovInRadians = Camera.camera.fov * Math.PI / 180;
+MouseSelect.whereDoesMouseLookOnDepth = function(depth, x, z, fov) {
+    var biggestSide = window.innerHeight;
+
+    var fovInRadians = fov * Math.PI / 180;
 
     var angleX = MouseSelect.relativeCoordinateToAngle(biggestSide/2, fovInRadians/2, x);
     var angleZ = MouseSelect.relativeCoordinateToAngle(biggestSide/2, fovInRadians/2, z);

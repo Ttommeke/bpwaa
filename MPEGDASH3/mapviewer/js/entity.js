@@ -17,6 +17,35 @@ Entity.createCube = function( myColor, scale, pos, rotation) {
     return cube;
 };
 
+Entity.areCoordinatesInCube = function(position, cube, hitbox) {
+    var xLess = cube.position.x - hitbox.x/2;
+    var xMore = cube.position.x + hitbox.x/2;
+    var yLess = cube.position.y - hitbox.y/2;
+    var yMore = cube.position.y + hitbox.y/2;
+    var zLess = cube.position.z - hitbox.z/2;
+    var zMore = cube.position.z + hitbox.z/2;
+
+    if (
+        xLess <= position.x && xMore >= position.x &&
+        yLess <= position.y && xMore >= position.y &&
+        zLess <= position.z && xMore >= position.z
+    ) {
+        return true;
+    } else {
+        return false;
+    }
+};
+
+Entity.returnCubeFromListWhereCoordinatesAreIn = function(position, cubes, hitbox) {
+    for (var i = 0; i < cubes.length; i++) {
+        if (Entity.areCoordinatesInCube(position, cubes[i], hitbox)) {
+            return cubes[i];
+        }
+    };
+
+    return undefined;
+};
+
 Entity.generateEntity = function(id, x, z) {
 
     if (id === 1) {

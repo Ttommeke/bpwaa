@@ -4,33 +4,47 @@ var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioCo
     this.streamerPlayer = streamerPlayer;
     this.onUpdateCallback = function(dummyEvent) {};
     this.interval = undefined;
+
+    this.manualMode = false;
 };
 
 MetaDataStreamerPlayer.prototype.setOnUpdateCallback = function (callback) {
     this.onUpdateCallback = callback;
 };
 
+MetaDataStreamerPlayer.prototype.setManualMode = function(value) {
+    this.manualMode = value;
+};
+
+MetaDataStreamerPlayer.prototype.manualMove = function(position) {
+    if (this.manualMode) {
+        this.streamerPlayer.getPannerNode().setPosition(position.x,position.y,position.z);
+    }
+};
+
 MetaDataStreamerPlayer.prototype.play = function () {
     var that = this;
 
     this.interval = setInterval(function() {
-        var currentTime = that.streamerPlayer.getCurrentTime();
+        if (!that.manualMode) {
+            var currentTime = that.streamerPlayer.getCurrentTime();
 
-        var before = that.getMetaDataBefore(currentTime);
+            var before = that.getMetaDataBefore(currentTime);
 
-        var after = that.getMetaDataAfter(currentTime);
+            var after = that.getMetaDataAfter(currentTime);
 
-        var deltaT = after.moment - before.moment + 0.0000001;
-        var deltaBefore = currentTime - before.moment;
-        var deltaAfter = after.moment - currentTime;
+            var deltaT = after.moment - before.moment + 0.0000001;
+            var deltaBefore = currentTime - before.moment;
+            var deltaAfter = after.moment - currentTime;
 
-        var x = (before.x * (deltaT - deltaBefore) + after.x * (deltaT - deltaAfter)) / deltaT;
-        var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
-        var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
+            var x = (before.x * (deltaT - deltaBefore) + after.x * (deltaT - deltaAfter)) / deltaT;
+            var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
+            var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
 
-        that.streamerPlayer.getPannerNode().setPosition(x,y,z);
+            that.streamerPlayer.getPannerNode().setPosition(x,y,z);
 
-        that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, initData: that.metaDataStreamer.initData });
+            that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, initData: that.metaDataStreamer.initData });
+        }
 
     }, 50);
 };

@@ -27,23 +27,13 @@ Entity.areCoordinatesInCube = function(position, cube, hitbox) {
 
     if (
         xLess <= position.x && xMore >= position.x &&
-        yLess <= position.y && xMore >= position.y &&
-        zLess <= position.z && xMore >= position.z
+        yLess <= position.y && yMore >= position.y &&
+        zLess <= position.z && zMore >= position.z
     ) {
         return true;
     } else {
         return false;
     }
-};
-
-Entity.returnCubeFromListWhereCoordinatesAreIn = function(position, cubes, hitbox) {
-    for (var i = 0; i < cubes.length; i++) {
-        if (Entity.areCoordinatesInCube(position, cubes[i], hitbox)) {
-            return cubes[i];
-        }
-    };
-
-    return undefined;
 };
 
 Entity.generateEntity = function(id, x, z) {

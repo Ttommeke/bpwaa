@@ -19,16 +19,16 @@ Player.executeKeys = function(player, deltaTime) {
 
     var direction = new THREE.Vector3(0,0,0);
 
-    if (Events.keys.up) {
+    if (Events.keys.ArrowUp.isPressed()) {
         direction.z -= 1;
     }
-    if (Events.keys.down) {
+    if (Events.keys.ArrowDown.isPressed()) {
         direction.z += 1;
     }
-    if (Events.keys.left) {
+    if (Events.keys.ArrowLeft.isPressed()) {
         direction.x -= 1;
     }
-    if (Events.keys.right) {
+    if (Events.keys.ArrowRight.isPressed()) {
         direction.x += 1;
     }
 

@@ -1,5 +1,7 @@
 var scene = new THREE.Scene();
 
+$.mobile.loading().hide();
+
 var renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight-4);
 document.body.appendChild( renderer.domElement );
@@ -8,10 +10,7 @@ var fpsCounter = new Stats();
 fpsCounter.showPanel(0);
 document.body.appendChild( fpsCounter.dom );
 
-var mouseCube = Entity.createCube(0xCC0000,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));//var mouseCube =
-scene.add(mouseCube);
 var masterPlayer = undefined;
-
 var soundCubes = [];
 
 var setPositionAudioListener = function(x,y,z) {
@@ -42,18 +41,41 @@ var render = function() {
 	requestAnimationFrame( render );
 };
 
+var mouseCube = Entity.createCube(0xCC0000,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));//var mouseCube =
+scene.add(mouseCube);
+
+var draggingSoundCube = false;
+var soundCubeBeingDragged = undefined;
+
 var moveMouseCubeAndSelectSoundCube = function() {
 	var posLookMouse = MouseSelect.positionWhereMouseLooksOnYAxisFromCenterPoint(0.5,Events.mouse.position,Camera.camera.position, Camera.camera.fov);
-	var cubeSelected = Entity.returnCubeFromListWhereCoordinatesAreIn(posLookMouse, soundCubes, { x: 1, y: 1, z: 1 });
+	var cubeSelected = SoundCube.returnCubeFromListWhereCoordinatesAreIn(posLookMouse, soundCubes, { x: 1, y: 1, z: 1 });
 
 	soundCubes.forEach(function(soundCube) {
-		soundCube.material.color.setHex( 0x0020CC );
+		soundCube.cube.material.color.setHex( 0x0020CC );
 	});
 
 	Utils.setXYZ(mouseCube.position, posLookMouse);
 
 	if (cubeSelected != undefined) {
-		cubeSelected.material.color.setHex( 0x99A9CC );
+		cubeSelected.cube.material.color.setHex( 0x99A9CC );
+	}
+
+	var leftMouseButtonUpdate = Events.mouse.leftMouseButton.readOutUpdate();
+
+	if (draggingSoundCube) {
+		if (leftMouseButtonUpdate.pressed) {
+			soundCubeBeingDragged.manualMove(posLookMouse);
+		} else {
+			draggingSoundCube = false;
+			soundCubeBeingDragged = undefined;
+		}
+	} else {
+		if (leftMouseButtonUpdate.pressed && leftMouseButtonUpdate.updated && cubeSelected != undefined) {
+			draggingSoundCube = true;
+			soundCubeBeingDragged = cubeSelected;
+			soundCubeBeingDragged.setManualMode(true);
+		}
 	}
 };
 
@@ -81,6 +103,16 @@ $.getJSON("map.json", function(data) {
 
 	TimeClock.getDelta();
 	render();
+});
+
+$('#bodyId').on("vmousedown", function(event) {
+	Events.mouseDownEvent(event);
+});
+$('#bodyId').on("vmousemove", function(event) {
+	Events.mouseMove(event);
+});
+$('#bodyId').on("vmouseup", function(event) {
+	Events.mouseUpEvent(event);
 });
 
 /**********************************
@@ -115,9 +147,8 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
         masterPlayer.play();
 
 		for (var i = 0; i < masterPlayer.metaDataStreamerPlayers.length; i++) {
-			soundCubes[i] = Entity.createCube(0x0020CC,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));//function( myColor, scale, pos, rotation) {
-			soundCubes[i].title = masterPlayer.metaDataStreamerPlayers[i].metaDataStreamer.initData.title;
-			scene.add(soundCubes[i]);
+			soundCubes[i] = new SoundCube(masterPlayer.metaDataStreamerPlayers[i].metaDataStreamer.initData.title, masterPlayer.metaDataStreamerPlayers[i]);
+			scene.add(soundCubes[i].cube);
 
 			var callback = function(activeMetaData) {
 				var soundCube = undefined;
@@ -129,28 +160,7 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
 					}
 				}
 
-				var currentTime = activeMetaData.currentTime;
-
-		        var before = activeMetaData.before;
-
-		        var after = activeMetaData.after;
-
-		        var deltaT = after.moment - before.moment + 0.0000001;
-		        var deltaBefore = currentTime - before.moment;
-		        var deltaAfter = after.moment - currentTime;
-
-		        var x = (before.x * (deltaT - deltaBefore) + after.x * (deltaT - deltaAfter)) / deltaT;
-		        var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
-		        var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
-
-				soundCube.position.x = x;
-				soundCube.position.y = y+0.5;
-				soundCube.position.z = z;
-
-				var extraScale = Math.abs(Math.sin(currentTime*8))/3 + 1;
-				soundCube.scale.x = extraScale;
-				soundCube.scale.y = extraScale;
-				soundCube.scale.z = extraScale;
+				soundCube.update(activeMetaData);
 			};
 
 			masterPlayer.metaDataStreamerPlayers[i].setOnUpdateCallback(callback);

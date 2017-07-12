@@ -8,7 +8,8 @@
 			canvas { width: 100%; height: 100% }
 		</style>
 		<script src="build/three.js"></script>
-		<script src="build/jquery-3.1.1.min.js"></script>
+		<script src="build/jquery-1.11.1.min.js"></script>
+		<script src="build/jquery.mobile-1.4.5.min.js"></script>
 		<script src="build/stats.min.js"></script>
 		<script src="js/events.js"></script>
 		<script src="js/camera.js"></script>
@@ -18,9 +19,9 @@
 		<script src="js/map.js"></script>
 		<script src="js/entity.js"></script>
 		<script src="js/utils.js"></script>
+		<script src="js/SoundCube.js"></script>
 		<script src="js/mouseselect.js"></script>
 
-		<script src="/node_modules/jquery/dist/jquery.js"></script>
         <script type="text/javascript" src="/non_npm_dependencies/parser.js"></script>
 	    <script src="../Streamer.js"></script>
 	    <script src="../MetaDataStreamer.js"></script>
@@ -30,7 +31,7 @@
 	    <script src="../MasterPlayer.js"></script>
 	    <script src="../MetaDataStreamerPlayer.js"></script>
 	</head>
-	<body onmousemove="Events.mouseMove(event)" onkeydown="Events.keyDownEvent(event)" onkeyup="Events.keyUpEvent(event)">
+	<body id="bodyId" onkeydown="Events.keyDownEvent(event)" onkeyup="Events.keyUpEvent(event)">
 	</body>
 	<script src="js/base.js"></script>
 </html>

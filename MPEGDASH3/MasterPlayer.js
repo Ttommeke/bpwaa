@@ -2,6 +2,7 @@ var MasterPlayer = function(period) {
     this.streamerPlayers = [];
     this.metaDataStreamerPlayers = [];
     this.period = period;
+    this.playing = true;
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();
@@ -30,7 +31,13 @@ MasterPlayer.prototype.findStreamerPlayerForMetaDataStreamer = function(metaData
     return undefined;
 };
 
+MasterPlayer.prototype.isPlaying = function() {
+    return this.playing;
+};
+
 MasterPlayer.prototype.play = function() {
+    this.playing = true;
+
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].play();
     }
@@ -41,6 +48,8 @@ MasterPlayer.prototype.play = function() {
 };
 
 MasterPlayer.prototype.pause = function() {
+    this.playing = false;
+
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].pause();
     }

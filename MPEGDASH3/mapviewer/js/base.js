@@ -11,6 +11,7 @@ fpsCounter.showPanel(0);
 document.body.appendChild( fpsCounter.dom );
 
 var masterPlayer = undefined;
+var masterPlayerControls = undefined;
 var soundCubes = [];
 
 var setPositionAudioListener = function(x,y,z) {
@@ -143,8 +144,10 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
 		period.startBufferProccess();
 
         masterPlayer = new MasterPlayer(period);
+		masterPlayerControls = new MasterPlayerControls(masterPlayer);
 
         masterPlayer.play();
+		masterPlayerControls.generateControlsInDiv("forControls");
 
 		for (var i = 0; i < masterPlayer.metaDataStreamerPlayers.length; i++) {
 			soundCubes[i] = new SoundCube(masterPlayer.metaDataStreamerPlayers[i].metaDataStreamer.initData.title, masterPlayer.metaDataStreamerPlayers[i]);

@@ -3,12 +3,19 @@
 	<head>
 		<meta charset=utf-8>
 		<title>MapViewer</title>
+
 		<style>
 			body { margin: 0; }
 			canvas { width: 100%; height: 100% }
+
+			#forControls {
+				position: absolute;
+				bottom: 10px;
+			}
 		</style>
 		<script src="build/three.js"></script>
 		<script src="build/jquery-1.11.1.min.js"></script>
+		<script src="build/jquery-ui.min.js"></script>
 		<script src="build/jquery.mobile-1.4.5.min.js"></script>
 		<script src="build/stats.min.js"></script>
 		<script src="js/events.js"></script>
@@ -30,10 +37,12 @@
 	    <script src="../Period.js"></script>
 	    <script src="../MasterPlayer.js"></script>
 	    <script src="../MetaDataStreamerPlayer.js"></script>
+	    <script src="../MasterPlayerControls.js"></script>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 	<body id="bodyId" onkeydown="Events.keyDownEvent(event)" onkeyup="Events.keyUpEvent(event)">
+		<div id="forControls"></div>
 	</body>
 	<script src="js/base.js"></script>
 </html>

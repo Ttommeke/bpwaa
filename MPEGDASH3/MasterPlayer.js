@@ -35,6 +35,32 @@ MasterPlayer.prototype.isPlaying = function() {
     return this.playing;
 };
 
+MasterPlayer.prototype.getDuration = function() {
+
+    var max = 0;
+
+    for (var i = 0; i < this.streamerPlayers.length; i++) {
+        var current = this.streamerPlayers[i].getDuration();
+
+        if (current > max) {
+            max = current;
+        }
+    }
+
+    return max;
+};
+
+MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
+
+    this.pause();
+
+    for (var i = 0; i < this.streamerPlayers.length; i++) {
+        this.streamerPlayers[i].setCurrentTime(newCurrentTime);
+    }
+
+    this.play();
+};
+
 MasterPlayer.prototype.play = function() {
     this.playing = true;
 

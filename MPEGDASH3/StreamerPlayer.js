@@ -32,3 +32,11 @@ StreamerPlayer.prototype.pause = function(){
 StreamerPlayer.prototype.getCurrentTime = function(){
     return this.stream.getAudioElement().currentTime;
 };
+
+StreamerPlayer.prototype.getDuration = function(){
+    return this.stream.getAudioElement().duration;
+};
+
+StreamerPlayer.prototype.setCurrentTime = function(newCurrentTime) {
+    this.stream.getAudioElement().currentTime = newCurrentTime;
+};

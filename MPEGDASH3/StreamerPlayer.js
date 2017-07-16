@@ -38,5 +38,7 @@ StreamerPlayer.prototype.getDuration = function(){
 };
 
 StreamerPlayer.prototype.setCurrentTime = function(newCurrentTime) {
-    this.stream.getAudioElement().currentTime = newCurrentTime;
+    if (this.getDuration() > newCurrentTime) {
+        this.stream.getAudioElement().currentTime = newCurrentTime;
+    }
 };

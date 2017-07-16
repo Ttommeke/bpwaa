@@ -2,16 +2,36 @@ var MasterPlayerControls = function(masterPlayer) {
     this.masterPlayer = masterPlayer;
     this.playButton = undefined;
     this.slider = undefined;
+    this.volumeSlider = undefined;
+    this.timeSpan = undefined;
+
+    var that = this;
+
+    this.masterPlayer.currentTimeUpdateFunction = function(currentTime) {
+        var duration = that.masterPlayer.getDuration();
+
+        that.timeSpan.textContent = Math.round(currentTime) + "/" + Math.round(duration) + " ";
+        that.slider.value = (currentTime / duration) * that.slider.max;
+    };
 };
 
 MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
 
+    this.createPlayPauseButtonInDiv(idOfDiv);
+    this.createTimeSliderInDiv(idOfDiv);
+    this.createVolumeSliderInDiv(idOfDiv);
+};
+
+MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv) {
+    
+};
+
+MasterPlayerControls.prototype.createPlayPauseButtonInDiv = function(idOfDiv) {
     var that = this;
 
     var callback = function() {
         that.playPauseButtonCallback();
     };
-
     this.playButton = document.createElement("button");
     if (this.masterPlayer.isPlaying()) {
         this.playButton.textContent = "pause";
@@ -20,6 +40,10 @@ MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
     }
     this.playButton.onclick = callback;
     document.getElementById(idOfDiv).appendChild(this.playButton);
+};
+
+MasterPlayerControls.prototype.createTimeSliderInDiv = function(idOfDiv) {
+    var that = this;
 
     var sliderCallback = function(event) {
         that.sliderChangeCallback();
@@ -30,9 +54,34 @@ MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
     this.slider.setAttribute("value", "0");
     this.slider.setAttribute("max", "100");
     this.slider.setAttribute("step", "0.1");
-    this.slider.setAttribute("id", "sliderMasterPlayerControl");
+    this.slider.setAttribute("style", "width: 200px;");
     this.slider.onchange = sliderCallback;
     document.getElementById(idOfDiv).appendChild(this.slider);
+
+    that.timeSpan = document.createElement("span");
+    that.timeSpan.textContent = "0/1 ";
+    document.getElementById(idOfDiv).appendChild(that.timeSpan);
+};
+
+MasterPlayerControls.prototype.createVolumeSliderInDiv = function(idOfDiv) {
+
+    var that = this;
+
+    var volumeSpan = document.createElement("span");
+    volumeSpan.textContent = "volume:";
+    document.getElementById(idOfDiv).appendChild(volumeSpan);
+
+    var volumeSliderCallback = function(event) {
+        that.volumeSliderChangeCallback();
+    };
+    this.volumeSlider = document.createElement("input");
+    this.volumeSlider.setAttribute("type", "range");
+    this.volumeSlider.setAttribute("min", "0");
+    this.volumeSlider.setAttribute("value", this.masterPlayer.getMasterVolume());
+    this.volumeSlider.setAttribute("max", "1");
+    this.volumeSlider.setAttribute("step", "0.01");
+    this.volumeSlider.onchange = volumeSliderCallback;
+    document.getElementById(idOfDiv).appendChild(this.volumeSlider);
 };
 
 MasterPlayerControls.prototype.sliderChangeCallback = function() {
@@ -40,6 +89,12 @@ MasterPlayerControls.prototype.sliderChangeCallback = function() {
     var valueOfSlider = this.slider.value;
 
     this.masterPlayer.setCurrentTime((valueOfSlider/100) * duration);
+};
+
+MasterPlayerControls.prototype.volumeSliderChangeCallback = function() {
+    var valueOfSlider = this.volumeSlider.value;
+
+    this.masterPlayer.setMasterVolume(valueOfSlider);
 };
 
 MasterPlayerControls.prototype.playPauseButtonCallback = function() {

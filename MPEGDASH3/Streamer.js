@@ -2,7 +2,6 @@ var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     var that = this;
 
     this.name = shakaAdaptionSet.id;
-    console.log(shakaAdaptionSet);
 
     this.mediaSource = new MediaSource();
     this.segmentsLoaded = 0;

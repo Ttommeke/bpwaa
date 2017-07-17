@@ -36,6 +36,7 @@ MasterPlayer.prototype.getMasterVolume = function() {
 MasterPlayer.prototype.findStreamerPlayerForMetaDataStreamer = function(metaDataStreamer) {
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         if (this.streamerPlayers[i].stream.name == metaDataStreamer.name.substring( 0, metaDataStreamer.name.length - 9)) {
+            console.log(this.streamerPlayers[i]);
             return this.streamerPlayers[i];
         }
     }

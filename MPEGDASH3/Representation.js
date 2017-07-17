@@ -39,6 +39,8 @@ Representation.prototype.getSegment = function(index) {
                 that.appendBuffer(data);
 
                 resolve();
+            }).catch(function() {
+                reject();
             });
         } else {
             reject();

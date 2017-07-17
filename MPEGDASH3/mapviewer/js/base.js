@@ -119,7 +119,7 @@ $('#bodyId').on("vmouseup", function(event) {
 /**********************************
 ************** Audio **************
 **********************************/
-try {
+
 var getMpdFile = function(url) {
     return sr.mpdParser(url);
 };
@@ -170,7 +170,3 @@ getMpdFile("/MPEGDASH2/song/output/stream.mpd").then(function(mpd) {
 		}
     });
 });
-
-} catch (excep) {
-	console.log(excep);
-}

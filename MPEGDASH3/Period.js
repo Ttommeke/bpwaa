@@ -38,7 +38,7 @@ Period.prototype.startBufferProccess = function() {
             stream.getNextSegment().then(function() {
                 nextSegmentForAudio(stream);
             }).catch(function() {
-                console.log("Stream done");
+                console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
             });
         } else {
             console.log("Throtteling Stream");
@@ -63,53 +63,14 @@ Period.prototype.startBufferProccess = function() {
     }
 };
 
-Period.prototype.getNextSegment = function() {
-    var that = this;
-
-    return new Promise(function(resolve, reject) {
-        var totalStreams = that.streams.length + that.metaDataStreams.length;
-        var streamsReady = 0;
-        var rejects = 0;
-
-        var resolveFunction = function() {
-            streamsReady++;
-
-            if (streamsReady >= totalStreams) {
-                if (rejects >= totalStreams) {
-                    reject();
-                } else {
-                    resolve();
-                }
-            }
-        };
-
-        for (var i = 0; i < that.streams.length; i++) {
-
-            that.streams[i].getNextSegment().then(function() {
-                resolveFunction();
-            }).catch(function() {
-                rejects++;
-                resolveFunction();
-            });
-        }
-
-        for (var i = 0; i < that.metaDataStreams.length; i++) {
-            that.metaDataStreams[i].getNextSegment().then(function() {
-                resolveFunction();
-            }).catch(function() {
-                rejects++;
-                resolveFunction();
-            });
-        }
-    });
-};
-
 Period.prototype.isStreamRunningOutOfControl = function(stream) {
     var that = this;
 
     var streamThatIsBehind = that.streams[0];
 
     for (var i = 1; i < that.streams.length; i++) {
+
+        console.log(that.streams[i].getTimeBuffered(), that.streams[i].getDuration() );
         if (that.streams[i].getTimeBuffered() < that.streams[i].getDuration() && that.streams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
             streamThatIsBehind = that.streams[i];
         }

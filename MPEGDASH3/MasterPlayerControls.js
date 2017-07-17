@@ -98,12 +98,14 @@ MasterPlayerControls.prototype.createVolumeSliderInDiv = function(idOfDiv) {
 MasterPlayerControls.prototype.sliderChangeCallback = function() {
     var duration = this.masterPlayer.getDuration();
     var valueOfSlider = this.slider.value;
+    this.slider.blur();
 
     this.masterPlayer.setCurrentTime((valueOfSlider/100) * duration);
 };
 
 MasterPlayerControls.prototype.volumeSliderChangeCallback = function() {
     var valueOfSlider = this.volumeSlider.value;
+    this.volumeSlider.blur();
 
     this.masterPlayer.setMasterVolume(valueOfSlider);
 };

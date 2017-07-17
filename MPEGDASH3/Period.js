@@ -110,8 +110,8 @@ Period.prototype.isStreamRunningOutOfControl = function(stream) {
     var streamThatIsBehind = that.streams[0];
 
     for (var i = 1; i < that.streams.length; i++) {
-        if (that.streams[0].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
-            streamThatIsBehind = that.streams[0];
+        if (that.streams[i].getTimeBuffered() < that.streams[i].getDuration() && that.streams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
+            streamThatIsBehind = that.streams[i];
         }
     }
 

@@ -11,6 +11,7 @@ var StreamerPlayer = function(stream, audioContext, destination) {
     this.pannerNode.coneOuterAngle = 0;
     this.pannerNode.coneOuterGain = 0;
     this.pannerNode.setPosition(2,0,0);
+    this.playing = false;
 
     this.source = this.audioContext.createMediaElementSource(stream.getAudioElement());
     this.pannerNode.connect(destination);
@@ -22,11 +23,17 @@ StreamerPlayer.prototype.getPannerNode = function() {
 };
 
 StreamerPlayer.prototype.play = function(){
+    this.playing = true;
     this.stream.getAudioElement().play();
 };
 
 StreamerPlayer.prototype.pause = function(){
+    this.playing = false;
     this.stream.getAudioElement().pause();
+};
+
+StreamerPlayer.prototype.isPlaying = function(){
+    return this.playing;
 };
 
 StreamerPlayer.prototype.getCurrentTime = function(){

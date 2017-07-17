@@ -6,6 +6,22 @@ var MasterPlayerControls = function(masterPlayer) {
     this.timeSpan = undefined;
 
     var that = this;
+};
+
+MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
+
+    var players = this.masterPlayer.streamerPlayers;
+    var metaDataStreamerPlayers = this.masterPlayer.metaDataStreamerPlayers;
+
+    for (var i = 0; i < players.length; i++) {
+        this.createSingleAudioControl(idOfDiv, players[i], metaDataStreamerPlayers[i]);
+    }
+
+    this.createPlayPauseButtonInDiv(idOfDiv);
+    this.createTimeSliderInDiv(idOfDiv);
+    this.createVolumeSliderInDiv(idOfDiv);
+
+    var that = this;
 
     this.masterPlayer.currentTimeUpdateFunction = function(currentTime) {
         var duration = that.masterPlayer.getDuration();
@@ -15,15 +31,10 @@ var MasterPlayerControls = function(masterPlayer) {
     };
 };
 
-MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
+MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv, streamerPlayer, metaDataStreamerPlayer) {
+    var audioControl = new StreamerPlayerControls(streamerPlayer, metaDataStreamerPlayer);
 
-    this.createPlayPauseButtonInDiv(idOfDiv);
-    this.createTimeSliderInDiv(idOfDiv);
-    this.createVolumeSliderInDiv(idOfDiv);
-};
-
-MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv) {
-    
+    audioControl.generateControlsInDiv(idOfDiv);
 };
 
 MasterPlayerControls.prototype.createPlayPauseButtonInDiv = function(idOfDiv) {

@@ -1,7 +1,6 @@
 var SoundCube = function (title, metaDataStreamerPlayer) {
     this.cube = Entity.createCube(0x0020CC,new THREE.Vector3(0.3,0.3,0.3),new THREE.Vector3(0,0.5,0),new THREE.Vector3(0,0,0));
     this.title = title;
-    this.manualMode = false;
     this.metaDataStreamerPlayer = metaDataStreamerPlayer;
 };
 
@@ -16,12 +15,11 @@ SoundCube.returnCubeFromListWhereCoordinatesAreIn = function(position, cubes, hi
 };
 
 SoundCube.prototype.setManualMode = function(value) {
-    this.manualMode = value;
     this.metaDataStreamerPlayer.setManualMode(value);
 };
 
 SoundCube.prototype.manualMove = function(position) {
-    if (this.manualMode) {
+    if (this.metaDataStreamerPlayer.isInManualMode()) {
         Utils.setXYZ(this.cube.position,position);
         this.metaDataStreamerPlayer.manualMove(position);
     }
@@ -45,11 +43,10 @@ SoundCube.prototype.update = function (activeMetaData) {
     var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
     var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
 
-    if (!this.manualMode) {
-        soundCube.position.x = x;
-        soundCube.position.y = y+0.5;
-        soundCube.position.z = z;
-    }
+    soundCube.position.x = x;
+    soundCube.position.y = y+0.5;
+    soundCube.position.z = z;
+
 
     var extraScale = Math.abs(Math.sin(currentTime*8))/3 + 1;
     soundCube.scale.x = extraScale;

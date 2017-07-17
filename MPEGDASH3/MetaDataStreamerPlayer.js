@@ -4,15 +4,27 @@ var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioCo
     this.streamerPlayer = streamerPlayer;
     this.onUpdateCallback = function(dummyEvent) {};
     this.interval = undefined;
+    this.manualModeChangeCallback = undefined;
 
     this.manualMode = false;
+};
+
+MetaDataStreamerPlayer.prototype.isInManualMode = function() {
+    return this.manualMode;
 };
 
 MetaDataStreamerPlayer.prototype.setOnUpdateCallback = function (callback) {
     this.onUpdateCallback = callback;
 };
 
+MetaDataStreamerPlayer.prototype.setOnManualModeChangeCallback = function (callback) {
+    this.manualModeChangeCallback = callback;
+};
+
 MetaDataStreamerPlayer.prototype.setManualMode = function(value) {
+    if (this.manualModeChangeCallback != undefined) {
+        this.manualModeChangeCallback(value);
+    }
     this.manualMode = value;
 };
 

@@ -5,6 +5,7 @@ var StreamerPlayerControls = function(streamerPlayer, metaDataStreamerPlayer) {
     this.metaDataStreamerPlayer = metaDataStreamerPlayer;
     this.playButton = undefined;
     this.titleSpan = undefined;
+    this.muteButton = undefined;
 
     var that = this;
 
@@ -18,6 +19,7 @@ var StreamerPlayerControls = function(streamerPlayer, metaDataStreamerPlayer) {
 StreamerPlayerControls.prototype.generateControlsInDiv = function(idOfDiv) {
     this.createTitleSpan(idOfDiv);
     this.createPlayPauseManualModeButtonInDiv(idOfDiv);
+    this.createMuteButton(idOfDiv);
     this.createBreakLine(idOfDiv);
 };
 
@@ -51,6 +53,34 @@ StreamerPlayerControls.prototype.playPauseManualModeButtonCallback = function() 
         this.metaDataStreamerPlayer.setManualMode(false);
     } else {
         this.metaDataStreamerPlayer.setManualMode(true);
+    }
+};
+
+StreamerPlayerControls.prototype.createMuteButton = function(idOfDiv) {
+    var that = this;
+
+    that.muteButton = document.createElement("button");
+    if (this.streamerPlayer.getVolume() > 0) {
+        that.muteButton.textContent = "mute";
+    } else {
+        that.muteButton.textContent = "unmute";
+    }
+
+    var callback = function() {
+        that.muteUnMuteCallback();
+    };
+    this.muteButton.onclick = callback;
+
+    document.getElementById(idOfDiv).appendChild(that.muteButton);
+};
+
+StreamerPlayerControls.prototype.muteUnMuteCallback = function() {
+    if (this.streamerPlayer.getVolume() > 0) {
+        this.streamerPlayer.setVolume(0);
+        this.muteButton.textContent = "unmute";
+    } else {
+        this.streamerPlayer.setVolume(1);
+        this.muteButton.textContent = "mute";
     }
 };
 

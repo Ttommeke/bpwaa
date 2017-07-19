@@ -1,3 +1,4 @@
+
 var StreamerPlayer = function(stream, audioContext, destination) {
     this.stream = stream;
     this.audioContext = audioContext;
@@ -11,11 +12,24 @@ var StreamerPlayer = function(stream, audioContext, destination) {
     this.pannerNode.coneOuterAngle = 0;
     this.pannerNode.coneOuterGain = 0;
     this.pannerNode.setPosition(2,0,0);
+
+    this.gainNode = audioContext.createGain();
+    this.gainNode.gain.value = 1;
+
     this.playing = false;
 
     this.source = this.audioContext.createMediaElementSource(stream.getAudioElement());
-    this.pannerNode.connect(destination);
+    this.pannerNode.connect(this.gainNode);
+    this.gainNode.connect(destination);
     this.source.connect(this.pannerNode);
+};
+
+StreamerPlayer.prototype.setVolume = function(volume) {
+    this.gainNode.gain.value = volume;
+};
+
+StreamerPlayer.prototype.getVolume = function(volume) {
+    return this.gainNode.gain.value;
 };
 
 StreamerPlayer.prototype.getPannerNode = function() {

@@ -41,7 +41,7 @@ Period.prototype.startBufferProccess = function() {
                 console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
             });
         } else {
-            console.log("Throtteling Stream");
+            //console.log("Throtteling Stream");
             setTimeout(function(){ nextSegmentForAudio(stream); }, 100);
         }
     };
@@ -70,7 +70,7 @@ Period.prototype.isStreamRunningOutOfControl = function(stream) {
 
     for (var i = 1; i < that.streams.length; i++) {
 
-        console.log(that.streams[i].getTimeBuffered(), that.streams[i].getDuration() );
+        //console.log(that.streams[i].getTimeBuffered(), that.streams[i].getDuration() );
         if (that.streams[i].getTimeBuffered() < that.streams[i].getDuration() && that.streams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
             streamThatIsBehind = that.streams[i];
         }

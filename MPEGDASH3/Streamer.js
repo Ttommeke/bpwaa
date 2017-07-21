@@ -51,7 +51,14 @@ Streamer.prototype.addRepresentation = function(shakaRepresentation) {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        var sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
+        var sourceBuffer = undefined;
+
+        if (navigator.userAgent.search("Firefox") > -1) {
+            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
+        } else if (navigator.userAgent.search("Chrome") > -1) {
+            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mpeg');
+        }
+
 
         that.representations.push(new Representation(sourceBuffer, shakaRepresentation, function() {
             resolve();

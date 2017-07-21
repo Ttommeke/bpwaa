@@ -1,7 +1,7 @@
 
 
-var StreamerPlayerControls = function(streamerPlayer, metaDataStreamerPlayer) {
-    this.streamerPlayer = streamerPlayer;
+var StreamerPlayerControls = function(audioObject, metaDataStreamerPlayer) {
+    this.audioObject = audioObject;
     this.metaDataStreamerPlayer = metaDataStreamerPlayer;
     this.playButton = undefined;
     this.titleSpan = undefined;
@@ -60,7 +60,7 @@ StreamerPlayerControls.prototype.createMuteButton = function(idOfDiv) {
     var that = this;
 
     that.muteButton = document.createElement("button");
-    if (this.streamerPlayer.getVolume() > 0) {
+    if (this.audioObject.getVolume() > 0) {
         that.muteButton.textContent = "mute";
     } else {
         that.muteButton.textContent = "unmute";
@@ -75,11 +75,11 @@ StreamerPlayerControls.prototype.createMuteButton = function(idOfDiv) {
 };
 
 StreamerPlayerControls.prototype.muteUnMuteCallback = function() {
-    if (this.streamerPlayer.getVolume() > 0) {
-        this.streamerPlayer.setVolume(0);
+    if (this.audioObject.getVolume() > 0) {
+        this.audioObject.setVolume(0);
         this.muteButton.textContent = "unmute";
     } else {
-        this.streamerPlayer.setVolume(1);
+        this.audioObject.setVolume(1);
         this.muteButton.textContent = "mute";
     }
 };

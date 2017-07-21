@@ -10,11 +10,10 @@ var MasterPlayerControls = function(masterPlayer) {
 
 MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
 
-    var players = this.masterPlayer.streamerPlayers;
     var metaDataStreamerPlayers = this.masterPlayer.metaDataStreamerPlayers;
 
-    for (var i = 0; i < players.length; i++) {
-        this.createSingleAudioControl(idOfDiv, players[i], metaDataStreamerPlayers[i]);
+    for (var i = 0; i < metaDataStreamerPlayers.length; i++) {
+        this.createSingleAudioControl(idOfDiv, metaDataStreamerPlayers[i].audioObject, metaDataStreamerPlayers[i]);
     }
 
     this.createPlayPauseButtonInDiv(idOfDiv);
@@ -31,8 +30,8 @@ MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
     };
 };
 
-MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv, streamerPlayer, metaDataStreamerPlayer) {
-    var audioControl = new StreamerPlayerControls(streamerPlayer, metaDataStreamerPlayer);
+MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv, audioObject, metaDataStreamerPlayer) {
+    var audioControl = new StreamerPlayerControls(audioObject, metaDataStreamerPlayer);
 
     audioControl.generateControlsInDiv(idOfDiv);
 };

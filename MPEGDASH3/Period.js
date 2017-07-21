@@ -4,6 +4,7 @@ var OUT_OF_CONTROL_THRESHOLD = 30; //30 seconden
 var Period = function(shakaPeriod, onReadyCallBack) {
     this.streams = [];
     this.metaDataStreams = [];
+    this.duration = shakaPeriod.duration;
 
     var totalStreamsToParse = shakaPeriod.streamSetInfos.length;
     var totalStreamsParsed = 0;
@@ -82,6 +83,10 @@ Period.prototype.isStreamRunningOutOfControl = function(stream) {
         return false;
     }
 }
+
+Period.prototype.getDuration = function() {
+    return this.duration;
+};
 
 Period.prototype.addStreamFromAdaptionSet = function(shakaAdaptionSet) {
 

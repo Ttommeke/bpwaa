@@ -1,39 +1,17 @@
 
-var StreamerPlayer = function(stream, audioContext, destination) {
+var StreamerPlayer = function(stream, audioContext) {
     this.stream = stream;
     this.audioContext = audioContext;
-    this.pannerNode = this.audioContext.createPanner();
-    this.pannerNode.panningModel = 'HRTF';
-    this.pannerNode.distanceModel = 'inverse';
-    this.pannerNode.refDistance = 1;
-    this.pannerNode.maxDistance = 10000;
-    this.pannerNode.rolloffFactor = 1;
-    this.pannerNode.coneInnerAngle = 360;
-    this.pannerNode.coneOuterAngle = 0;
-    this.pannerNode.coneOuterGain = 0;
-    this.pannerNode.setPosition(2,0,0);
-
-    this.gainNode = audioContext.createGain();
-    this.gainNode.gain.value = 1;
-
     this.playing = false;
 
     this.source = this.audioContext.createMediaElementSource(stream.getAudioElement());
-    this.pannerNode.connect(this.gainNode);
-    this.gainNode.connect(destination);
-    this.source.connect(this.pannerNode);
+    this.channelSplitter = this.audioContext.createChannelSplitter(this.source.channelCount);
+
+    this.source.connect(this.channelSplitter);
 };
 
-StreamerPlayer.prototype.setVolume = function(volume) {
-    this.gainNode.gain.value = volume;
-};
-
-StreamerPlayer.prototype.getVolume = function(volume) {
-    return this.gainNode.gain.value;
-};
-
-StreamerPlayer.prototype.getPannerNode = function() {
-    return this.pannerNode;
+StreamerPlayer.prototype.getSource = function() {
+    return this.channelSplitter;
 };
 
 StreamerPlayer.prototype.play = function(){
@@ -59,9 +37,13 @@ StreamerPlayer.prototype.getDuration = function(){
 };
 
 StreamerPlayer.prototype.setCurrentTime = function(newCurrentTime) {
-    if (this.getDuration() > newCurrentTime) {
-        this.stream.getAudioElement().currentTime = newCurrentTime;
+    if (this.stream.getAudioElement().loop) {
+        this.stream.getAudioElement().currentTime = newCurrentTime % this.getDuration();
     } else {
-        this.stream.getAudioElement().currentTime = this.getDuration();
+        if (this.getDuration() > newCurrentTime) {
+            this.stream.getAudioElement().currentTime = newCurrentTime;
+        } else {
+            this.stream.getAudioElement().currentTime = this.getDuration();
+        }
     }
 };

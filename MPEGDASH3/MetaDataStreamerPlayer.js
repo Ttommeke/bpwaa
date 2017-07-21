@@ -1,10 +1,11 @@
-var MetaDataStreamerPlayer = function( streamerPlayer, metaDataStreamer, audioContext) {
+var MetaDataStreamerPlayer = function( audioObject, metaDataStreamer, audioContext, masterPlayer) {
     this.audioContext = audioContext;
     this.metaDataStreamer = metaDataStreamer;
-    this.streamerPlayer = streamerPlayer;
+    this.audioObject = audioObject;
     this.onUpdateCallback = function(dummyEvent) {};
     this.interval = undefined;
     this.manualModeChangeCallback = undefined;
+    this.masterPlayer = masterPlayer;
 
     this.manualMode = false;
 };
@@ -30,7 +31,7 @@ MetaDataStreamerPlayer.prototype.setManualMode = function(value) {
 
 MetaDataStreamerPlayer.prototype.manualMove = function(position) {
     if (this.manualMode) {
-        this.streamerPlayer.getPannerNode().setPosition(position.x,position.y,position.z);
+        this.audioObject.getPannerNode().setPosition(position.x,position.y,position.z);
     }
 };
 
@@ -39,7 +40,7 @@ MetaDataStreamerPlayer.prototype.play = function () {
 
     this.interval = setInterval(function() {
         if (!that.manualMode) {
-            var currentTime = that.streamerPlayer.getCurrentTime();
+            var currentTime = that.masterPlayer.getCurrentTime();
 
             var before = that.getMetaDataBefore(currentTime);
 
@@ -53,7 +54,7 @@ MetaDataStreamerPlayer.prototype.play = function () {
             var y = (before.y * (deltaT - deltaBefore) + after.y * (deltaT - deltaAfter)) / deltaT;
             var z = (before.z * (deltaT - deltaBefore) + after.z * (deltaT - deltaAfter)) / deltaT;
 
-            that.streamerPlayer.getPannerNode().setPosition(x,y,z);
+            that.audioObject.getPannerNode().setPosition(x,y,z);
 
             that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, initData: that.metaDataStreamer.initData });
         }
@@ -70,6 +71,9 @@ MetaDataStreamerPlayer.prototype.getMetaDataBefore = function (currentTime) {
 
     for (var i = 0; i < metaDatas.length - 1; i++) {
         if (metaDatas[i].moment > currentTime) {
+            if ( metaDatas[i-1] == undefined) {
+                console.log("meta data undefined", metaDatas, i-1, currentTime);
+            }
             return metaDatas[i-1];
         }
     }

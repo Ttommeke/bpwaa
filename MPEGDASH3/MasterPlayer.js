@@ -1,28 +1,40 @@
 var MasterPlayer = function(period) {
     this.streamerPlayers = [];
     this.metaDataStreamerPlayers = [];
+    this.audioObjects = [];
     this.period = period;
     this.playing = true;
     this.interval = undefined;
     this.currentTimeUpdateFunction = undefined;
+
+    this.startPlayTime = -1;
+    this.alreadyInTimeBuffer = 0;
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     this.audioContext = new AudioContext();
     this.masterGain = this.audioContext.createGain();
     this.masterGain.connect(this.audioContext.destination);
     this.masterGain.gain.value = 1;
+    this.dynamicCompressor = this.audioContext.createDynamicsCompressor();
+    this.dynamicCompressor.connect(this.masterGain);
 
     for (var i = 0; i < period.streams.length; i++) {
         var stream = period.streams[i];
-        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext, this.masterGain));
+        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext));
     }
 
     for (var j = 0; j < period.metaDataStreams.length; j++) {
         var metaDataStreamer = period.metaDataStreams[j];
-        var streamerPlayer = this.findStreamerPlayerForMetaDataStreamer(metaDataStreamer);
+        var audioObject = this.generateAudioObjectFromMetaDataStreamer(metaDataStreamer);
 
-        this.metaDataStreamerPlayers.push(new MetaDataStreamerPlayer(streamerPlayer, metaDataStreamer, this.audioContext));
+        this.audioObjects.push(audioObject);
+        this.metaDataStreamerPlayers.push(new MetaDataStreamerPlayer(audioObject, metaDataStreamer, this.audioContext, this));
     }
+};
+
+MasterPlayer.prototype.generateAudioObjectFromMetaDataStreamer = function(metaDataStreamer) {
+
+    return new AudioObject(this.streamerPlayers, metaDataStreamer.initData, this.audioContext, this.dynamicCompressor);
 };
 
 MasterPlayer.prototype.setMasterVolume = function(newVolume) {
@@ -33,42 +45,18 @@ MasterPlayer.prototype.getMasterVolume = function() {
     return this.masterGain.gain.value;
 };
 
-MasterPlayer.prototype.findStreamerPlayerForMetaDataStreamer = function(metaDataStreamer) {
-    for (var i = 0; i < this.streamerPlayers.length; i++) {
-        if (this.streamerPlayers[i].stream.name == metaDataStreamer.name.substring( 0, metaDataStreamer.name.length - 9)) {
-            console.log(this.streamerPlayers[i]);
-            return this.streamerPlayers[i];
-        }
-    }
-
-    console.log("no StreamerPlayer founded for " + metaDataStreamer.name);
-    return undefined;
-};
-
 MasterPlayer.prototype.isPlaying = function() {
     return this.playing;
 };
 
-MasterPlayer.prototype.getLongestPlayer = function() {
-
-    var max = 0;
-    var player = undefined;
-
-    for (var i = 0; i < this.streamerPlayers.length; i++) {
-        var current = this.streamerPlayers[i].getDuration();
-
-        if (current > max) {
-            max = current;
-            player = this.streamerPlayers[i];
-        }
-    }
-
-    return player;
-};
-
 MasterPlayer.prototype.getDuration = function() {
 
-    return this.getLongestPlayer().getDuration();
+    return this.period.getDuration();
+};
+
+MasterPlayer.prototype.getCurrentTime = function() {
+
+    return (this.alreadyInTimeBuffer + (window.performance.now() - this.startPlayTime))/1000;
 };
 
 MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
@@ -78,6 +66,8 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].setCurrentTime(newCurrentTime);
     }
+
+    this.alreadyInTimeBuffer = newCurrentTime*1000;
 
     this.play();
 };
@@ -93,14 +83,14 @@ MasterPlayer.prototype.play = function() {
         this.metaDataStreamerPlayers[j].play();
     }
 
+    this.startPlayTime = window.performance.now();
+
     var that = this;
 
     this.interval = setInterval(function() {
 
-        var longestPlayer = that.getLongestPlayer();
-
-        if (that.currentTimeUpdateFunction != undefined && longestPlayer != undefined ) {
-            that.currentTimeUpdateFunction(longestPlayer.getCurrentTime());
+        if (that.currentTimeUpdateFunction != undefined ) {
+            that.currentTimeUpdateFunction(that.getCurrentTime());
         }
     }, 500);
 };
@@ -115,6 +105,8 @@ MasterPlayer.prototype.pause = function() {
     for (var j = 0; j < this.metaDataStreamerPlayers.length; j++) {
         this.metaDataStreamerPlayers[j].pause();
     }
+
+    this.alreadyInTimeBuffer += (window.performance.now() - this.startPlayTime);
 
     clearInterval(this.interval);
 };

@@ -1,0 +1,17 @@
+{
+    "title": "fly2",
+    "description": "This is the second fly!",
+    "channels": [
+        {
+            "type": "GENERATED",
+            "frequency": 205,
+            "waveType": "sawtooth",
+            "inputChannelIndex": 0,
+            "volume": 0.2
+        }
+    ],
+    "x": 7,
+    "y": 0,
+    "z": 6,
+    "moment": 0
+}

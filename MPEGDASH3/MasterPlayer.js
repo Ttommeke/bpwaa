@@ -61,7 +61,12 @@ MasterPlayer.prototype.getCurrentTime = function() {
 
 MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
 
-    this.pause();
+    var wasPlaying = false;
+
+    if (this.isPlaying()) {
+        wasPlaying = true;
+        this.pause();
+    }
 
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].setCurrentTime(newCurrentTime);
@@ -69,7 +74,9 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
 
     this.alreadyInTimeBuffer = newCurrentTime*1000;
 
-    this.play();
+    if (wasPlaying) {
+        this.play();
+    }
 };
 
 MasterPlayer.prototype.play = function() {
@@ -83,16 +90,29 @@ MasterPlayer.prototype.play = function() {
         this.metaDataStreamerPlayers[j].play();
     }
 
+    for (var k = 0; k < this.audioObjects.length; k++) {
+        this.audioObjects[k].play();
+    }
+
     this.startPlayTime = window.performance.now();
 
     var that = this;
 
     this.interval = setInterval(function() {
 
+        if (that.getCurrentTime() >= that.getDuration()) {
+            that.stop();
+        }
+
         if (that.currentTimeUpdateFunction != undefined ) {
             that.currentTimeUpdateFunction(that.getCurrentTime());
         }
     }, 500);
+};
+
+MasterPlayer.prototype.stop = function() {
+    this.pause();
+    this.setCurrentTime(0);
 };
 
 MasterPlayer.prototype.pause = function() {
@@ -104,6 +124,10 @@ MasterPlayer.prototype.pause = function() {
 
     for (var j = 0; j < this.metaDataStreamerPlayers.length; j++) {
         this.metaDataStreamerPlayers[j].pause();
+    }
+
+    for (var k = 0; k < this.audioObjects.length; k++) {
+        this.audioObjects[k].pause();
     }
 
     this.alreadyInTimeBuffer += (window.performance.now() - this.startPlayTime);

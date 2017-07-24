@@ -2,6 +2,9 @@
 
 var AudioObject = function(streamerPlayers, metaDataInit, audioContext, destination) {
     this.audioContext = audioContext;
+    this.metaDataInit = metaDataInit;
+
+    this.generatedNodes = [];
 
     this.channelMerger = this.audioContext.createChannelMerger(metaDataInit.channels.length);
     this.connectStreamerPlayerChannels(streamerPlayers, metaDataInit);
@@ -23,6 +26,7 @@ var AudioObject = function(streamerPlayers, metaDataInit, audioContext, destinat
     this.channelMerger.connect(this.pannerNode);
     this.pannerNode.connect(this.gainNode);
     this.gainNode.connect(destination);
+
 };
 
 AudioObject.prototype.connectStreamerPlayerChannels = function (streamerPlayers, metaDataInit) {
@@ -36,16 +40,22 @@ AudioObject.prototype.connectStreamerPlayerChannels = function (streamerPlayers,
             streamerPlayer.getSource().connect(gainNode, channel.outputChannelIndex, 0);
             gainNode.connect(that.channelMerger, 0, channel.inputChannelIndex);
         } else if (channel.type == "GENERATED") {
-            var oscilatorNode = that.audioContext.createOscillator();
-            var gainNode = that.audioContext.createGain();
-            gainNode.gain.value = channel.volume;
-            oscilatorNode.type = channel.waveType;
-            oscilatorNode.frequency.value = channel.frequency;
-
-            oscilatorNode.connect(gainNode);
-            gainNode.connect(that.channelMerger, 0, channel.inputChannelIndex);
-            oscilatorNode.start();
+            var generattedNode = new GeneratedAudioObjectChannel(channel, that.audioContext);
+            generattedNode.getEndNode().connect(that.channelMerger, 0, channel.inputChannelIndex);
+            that.generatedNodes.push(generattedNode);
         }
+    });
+};
+
+AudioObject.prototype.play = function() {
+    this.generatedNodes.forEach(function(generatedNode) {
+        generatedNode.play();
+    });
+};
+
+AudioObject.prototype.pause = function() {
+    this.generatedNodes.forEach(function(generatedNode) {
+        generatedNode.pause();
     });
 };
 

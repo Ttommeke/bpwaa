@@ -8,7 +8,7 @@ var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     this.representations = [];
     this.activeRepresentation = 0;
 
-    that.audioElement = document.createElement("AUDIO");
+    that.audioElement = document.createElement("VIDEO");
     that.audioElement.src = URL.createObjectURL(that.mediaSource);
 
     that.mediaSource.addEventListener('sourceopen', function() {
@@ -56,7 +56,7 @@ Streamer.prototype.addRepresentation = function(shakaRepresentation) {
         if (navigator.userAgent.search("Firefox") > -1) {
             sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
         } else if (navigator.userAgent.search("Chrome") > -1) {
-            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mpeg');
+            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
         }
 
 

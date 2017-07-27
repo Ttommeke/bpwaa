@@ -36,9 +36,20 @@ AudioObject.prototype.connectStreamerPlayerChannels = function (streamerPlayers,
         if (channel.type == "STREAM") {
             var streamerPlayer = that.findStreamerPlayerWithId(streamerPlayers, channel.id);
             var gainNode = that.audioContext.createGain();
+            gainNode.gain.value = channel.volume;
 
             streamerPlayer.getSource().connect(gainNode, channel.outputChannelIndex, 0);
-            gainNode.connect(that.channelMerger, 0, channel.inputChannelIndex);
+
+            if (channel.delay != undefined && channel.delay != 0){
+                var delayNode = that.audioContext.createDelay(channel.delay);
+                delayNode.delayTime.value = channel.delay;
+                
+                gainNode.connect(delayNode);
+                delayNode.connect(that.channelMerger, 0, channel.inputChannelIndex);
+            } else {
+                gainNode.connect(that.channelMerger, 0, channel.inputChannelIndex);
+            }
+
         } else if (channel.type == "GENERATED") {
             var generattedNode = new GeneratedAudioObjectChannel(channel, that.audioContext);
             generattedNode.getEndNode().connect(that.channelMerger, 0, channel.inputChannelIndex);

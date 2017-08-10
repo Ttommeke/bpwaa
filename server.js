@@ -8,6 +8,12 @@ mime.define({
     'text/xml': ['mpd'],
 });
 
+app.use('/', function(req, res, next) {
+    setTimeout(function() {
+        next();
+    },10);
+});
+
 app.use('/', express.static(__dirname));
 
 app.listen(port, function () {

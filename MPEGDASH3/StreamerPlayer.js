@@ -1,5 +1,5 @@
 
-var StreamerPlayer = function(stream, audioContext) {
+var StreamerPlayer = function(stream, audioContext, cantPlayCallback) {
     this.stream = stream;
     this.audioContext = audioContext;
     this.playing = false;
@@ -8,6 +8,22 @@ var StreamerPlayer = function(stream, audioContext) {
     this.channelSplitter = this.audioContext.createChannelSplitter(this.source.channelCount);
 
     this.source.connect(this.channelSplitter);
+
+    var that = this;
+
+    this.stream.getAudioElement().addEventListener("waiting", function() {
+        if (!that.canPlay()) {
+            cantPlayCallback();
+        }
+    });
+};
+
+StreamerPlayer.prototype.canPlay = function() {
+    if ( this.stream.getAudioElement().readyState >= 2) {
+        return true;
+    }
+
+    return false;
 };
 
 StreamerPlayer.prototype.getSource = function() {

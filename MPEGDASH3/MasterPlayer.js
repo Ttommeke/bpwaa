@@ -18,9 +18,15 @@ var MasterPlayer = function(period) {
     this.dynamicCompressor = this.audioContext.createDynamicsCompressor();
     this.dynamicCompressor.connect(this.masterGain);
 
+    var that = this;
+
+    var cantPlayCallback = function() {
+        that.pause();
+    };
+
     for (var i = 0; i < period.streams.length; i++) {
         var stream = period.streams[i];
-        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext));
+        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext, cantPlayCallback));
     }
 
     for (var j = 0; j < period.metaDataStreams.length; j++) {
@@ -81,6 +87,13 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
 
 MasterPlayer.prototype.play = function() {
     this.playing = true;
+
+//reset all streamerPlayers to the same point in time.
+    var currentTime = this.getCurrentTime();
+
+    for (var i = 0; i < this.streamerPlayers.length; i++) {
+        this.streamerPlayers[i].setCurrentTime(currentTime);
+    }
 
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].play();

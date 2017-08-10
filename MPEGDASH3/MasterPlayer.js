@@ -18,9 +18,11 @@ var MasterPlayer = function(period) {
     this.dynamicCompressor = this.audioContext.createDynamicsCompressor();
     this.dynamicCompressor.connect(this.masterGain);
 
+    this.playingBeforeFocedPause = false;
     var that = this;
 
     var cantPlayCallback = function() {
+        this.playingBeforeFocedPause = this.playing;
         that.pause();
     };
 
@@ -32,7 +34,7 @@ var MasterPlayer = function(period) {
             }
         }
 
-        if (everythingReady) {
+        if (everythingReady && this.playingBeforeFocedPause) {
             that.play();
         }
     };

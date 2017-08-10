@@ -1,5 +1,5 @@
 
-var StreamerPlayer = function(stream, audioContext, cantPlayCallback) {
+var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCallback) {
     this.stream = stream;
     this.audioContext = audioContext;
     this.playing = false;
@@ -11,10 +11,22 @@ var StreamerPlayer = function(stream, audioContext, cantPlayCallback) {
 
     var that = this;
 
+    this.iHadNotEnoughAudioAnymore = false;
+
     this.stream.getAudioElement().addEventListener("waiting", function() {
         if (!that.canPlay()) {
+            that.iHadNotEnoughAudioAnymore = true;
             cantPlayCallback();
         }
+    });
+
+    this.stream.getAudioElement().addEventListener("canplay", function() {
+        if (that.iHadNotEnoughAudioAnymore) {
+            canPlayCallback();
+        }
+
+        that.iHadNotEnoughAudioAnymore = false;
+        //canPlayCallback();
     });
 };
 
@@ -59,7 +71,7 @@ StreamerPlayer.prototype.setCurrentTime = function(newCurrentTime) {
         if (this.getDuration() > newCurrentTime) {
             this.stream.getAudioElement().currentTime = newCurrentTime;
         } else {
-            this.stream.getAudioElement().currentTime = this.getDuration();
+            this.stream.getAudioElement().currentTime = 0;
         }
     }
 };

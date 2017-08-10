@@ -24,9 +24,22 @@ var MasterPlayer = function(period) {
         that.pause();
     };
 
+    var canPlayCallback = function() {
+        var everythingReady = true;
+        for (var i = 0; i < that.streamerPlayers.length; i++) {
+            if (!that.streamerPlayers[i].canPlay()) {
+                everythingReady = false;
+            }
+        }
+
+        if (everythingReady) {
+            that.play();
+        }
+    };
+
     for (var i = 0; i < period.streams.length; i++) {
         var stream = period.streams[i];
-        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext, cantPlayCallback));
+        this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext, cantPlayCallback, canPlayCallback));
     }
 
     for (var j = 0; j < period.metaDataStreams.length; j++) {

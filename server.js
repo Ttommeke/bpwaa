@@ -11,7 +11,7 @@ mime.define({
 app.use('/', function(req, res, next) {
     setTimeout(function() {
         next();
-    },3000);
+    },10);
 });
 
 app.use('/', express.static(__dirname));

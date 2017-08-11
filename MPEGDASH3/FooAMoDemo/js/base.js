@@ -146,7 +146,6 @@ getMpdFile("/MPEGDASH3/FooAMoDemo/output/stream.mpd").then(function(mpd) {
         masterPlayer = new MasterPlayer(period);
 		masterPlayerControls = new MasterPlayerControls(masterPlayer);
 
-        masterPlayer.play();
 		masterPlayerControls.generateControlsInDiv("forControls");
 
 		for (var i = 0; i < masterPlayer.metaDataStreamerPlayers.length; i++) {

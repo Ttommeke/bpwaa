@@ -4,11 +4,11 @@ var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     this.name = shakaAdaptionSet.id;
 
     this.mediaSource = new MediaSource();
-    this.segmentsLoaded = 0;
+    this.segmentToLoad = 0;
     this.representations = [];
     this.activeRepresentation = 0;
 
-    that.audioElement = document.createElement("VIDEO");
+    that.audioElement = document.createElement("AUDIO");
     that.audioElement.src = URL.createObjectURL(that.mediaSource);
 
     that.mediaSource.addEventListener('sourceopen', function() {
@@ -44,7 +44,25 @@ Streamer.prototype.getTimeBuffered = function() {
 };
 
 Streamer.prototype.getDuration = function() {
-    return this.representations[this.activeRepresentation].getDuration();
+    return this.getAudioElement().duration;
+};
+
+Streamer.prototype.setCurrentTime = function(newCurrentTime) {
+    this.segmentToLoad = this.representations[this.activeRepresentation].getSegmentIndexOnTime(newCurrentTime);
+
+    if (this.segmentToLoad > 0) {
+        this.segmentToLoad = this.segmentToLoad - 1;
+    }
+
+    if (this.getDuration() > newCurrentTime) {
+        this.getAudioElement().currentTime = newCurrentTime;
+    } else {
+        if (isNaN(this.getDuration())) {
+            this.getAudioElement().currentTime = 0;
+        } else {
+            this.getAudioElement().currentTime = this.getDuration();
+        }
+    }
 };
 
 Streamer.prototype.addRepresentation = function(shakaRepresentation) {
@@ -71,8 +89,8 @@ Streamer.prototype.getNextSegment = function() {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        that.representations[that.activeRepresentation].getSegment(that.segmentsLoaded + 1).then(function() {
-            that.segmentsLoaded++;
+        that.representations[that.activeRepresentation].getSegment(that.segmentToLoad).then(function() {
+            that.segmentToLoad++;
 
             resolve(that);
         }).catch(function() {

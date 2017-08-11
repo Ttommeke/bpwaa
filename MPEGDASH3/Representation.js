@@ -27,12 +27,26 @@ Representation.prototype.getDuration = function() {
     return this.duration;
 };
 
+Representation.prototype.getSegmentIndexOnTime = function(time) {
+    var that = this;
+    var index = 0;
+
+    for (var i = 0; i < this.segments.length; i++) {
+        if (time >= this.segments[i].startTime && time < this.segments[i].endTime) {
+            index = i;
+            break;
+        }
+    }
+
+    return index;
+};
+
 Representation.prototype.getSegment = function(index) {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        if (that.segments.length > index) {
-            var segment = that.segments[index-1];
+        if (that.segments.length >= index) {
+            var segment = that.segments[index];
             var url = segment.url.getDomain() + segment.url.getPath();
 
             that.getData(url).then(function(data) {

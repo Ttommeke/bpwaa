@@ -11,27 +11,20 @@ var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCal
 
     var that = this;
 
-    this.iHadNotEnoughAudioAnymore = false;
-
     this.stream.getAudioElement().addEventListener("waiting", function() {
         if (!that.canPlay()) {
-            that.iHadNotEnoughAudioAnymore = true;
             cantPlayCallback();
+            console.log("how wacht! ");
         }
     });
 
     this.stream.getAudioElement().addEventListener("canplay", function() {
-        if (that.iHadNotEnoughAudioAnymore) {
-            canPlayCallback();
-        }
-
-        that.iHadNotEnoughAudioAnymore = false;
-        //canPlayCallback();
+        canPlayCallback();
     });
 };
 
 StreamerPlayer.prototype.canPlay = function() {
-    if ( this.stream.getAudioElement().readyState >= 2) {
+    if ( this.stream.getAudioElement().readyState >= 3) {
         return true;
     }
 
@@ -61,17 +54,9 @@ StreamerPlayer.prototype.getCurrentTime = function(){
 };
 
 StreamerPlayer.prototype.getDuration = function(){
-    return this.stream.getAudioElement().duration;
+    return this.stream.getDuration();
 };
 
 StreamerPlayer.prototype.setCurrentTime = function(newCurrentTime) {
-    if (this.stream.getAudioElement().loop) {
-        this.stream.getAudioElement().currentTime = newCurrentTime % this.getDuration();
-    } else {
-        if (this.getDuration() > newCurrentTime) {
-            this.stream.getAudioElement().currentTime = newCurrentTime;
-        } else {
-            this.stream.getAudioElement().currentTime = 0;
-        }
-    }
+    this.stream.setCurrentTime(newCurrentTime);
 };

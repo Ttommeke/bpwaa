@@ -3,7 +3,7 @@ var MasterPlayer = function(period) {
     this.metaDataStreamerPlayers = [];
     this.audioObjects = [];
     this.period = period;
-    this.playing = true;
+    this.playing = false;
     this.interval = undefined;
     this.currentTimeUpdateFunction = undefined;
 
@@ -22,20 +22,29 @@ var MasterPlayer = function(period) {
     var that = this;
 
     var cantPlayCallback = function() {
-        this.playingBeforeFocedPause = this.playing;
+        if (that.playing) {
+            that.playingBeforeFocedPause = true;
+        }
+
+        console.log("how stop how!");
         that.pause();
     };
 
     var canPlayCallback = function() {
+        console.log("try....");
         var everythingReady = true;
         for (var i = 0; i < that.streamerPlayers.length; i++) {
             if (!that.streamerPlayers[i].canPlay()) {
+                console.log("one is not ready...");
                 everythingReady = false;
             }
         }
 
-        if (everythingReady && this.playingBeforeFocedPause) {
+        if (everythingReady && that.playingBeforeFocedPause) {
             that.play();
+            console.log("Gogogo!");
+
+            that.playingBeforeFocedPause = false;
         }
     };
 
@@ -76,13 +85,18 @@ MasterPlayer.prototype.getDuration = function() {
 };
 
 MasterPlayer.prototype.getCurrentTime = function() {
-
-    return (this.alreadyInTimeBuffer + (window.performance.now() - this.startPlayTime))/1000;
+    if (this.playing) {
+        return (this.alreadyInTimeBuffer + (window.performance.now() - this.startPlayTime))/1000;
+    } else {
+        return this.alreadyInTimeBuffer / 1000;
+    }
 };
 
 MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
 
     var wasPlaying = false;
+
+    this.period.startBufferProccess();
 
     if (this.isPlaying()) {
         wasPlaying = true;
@@ -146,6 +160,10 @@ MasterPlayer.prototype.stop = function() {
 MasterPlayer.prototype.pause = function() {
     this.playing = false;
 
+    if (this.playing) {
+        this.alreadyInTimeBuffer += (window.performance.now() - this.startPlayTime);
+    }
+
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].pause();
     }
@@ -157,8 +175,6 @@ MasterPlayer.prototype.pause = function() {
     for (var k = 0; k < this.audioObjects.length; k++) {
         this.audioObjects[k].pause();
     }
-
-    this.alreadyInTimeBuffer += (window.performance.now() - this.startPlayTime);
 
     clearInterval(this.interval);
 };

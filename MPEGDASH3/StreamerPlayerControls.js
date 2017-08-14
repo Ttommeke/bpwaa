@@ -1,5 +1,20 @@
+/*
+StreamerPlayerControls-class
+----------------------------
 
+This class creates visual controls for a AudioObject.
 
+*/
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    audioObject - that has to be controlled
+    metaDataStreamerPlayer - MetaDataStreamerPlayer object that sends out updates to the AudioObject
+
+*/
 var StreamerPlayerControls = function(audioObject, metaDataStreamerPlayer) {
     this.audioObject = audioObject;
     this.metaDataStreamerPlayer = metaDataStreamerPlayer;

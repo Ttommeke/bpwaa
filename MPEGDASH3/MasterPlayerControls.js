@@ -1,3 +1,21 @@
+/*
+MasterPlayerControls-class
+-----------------
+
+Connects to an MasterPlayer-object en generates on screen controls for it.
+*/
+
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    masterPlayer - player to be controlled
+output: a MasterPlayerControls-object.
+
+*/
+
 var MasterPlayerControls = function(masterPlayer) {
     this.masterPlayer = masterPlayer;
     this.playButton = undefined;
@@ -8,10 +26,20 @@ var MasterPlayerControls = function(masterPlayer) {
     var that = this;
 };
 
+/*
+generateControlsInDiv
+-----------
+
+input:
+    idOfDiv - id of div where the controls should be generated in.
+output: controls will be generated in the div wif the id: idOfDiv
+
+*/
 MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
 
     var metaDataStreamerPlayers = this.masterPlayer.metaDataStreamerPlayers;
 
+    //generate for every audioObject a controller
     for (var i = 0; i < metaDataStreamerPlayers.length; i++) {
         this.createSingleAudioControl(idOfDiv, metaDataStreamerPlayers[i].audioObject, metaDataStreamerPlayers[i]);
     }
@@ -22,6 +50,7 @@ MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
 
     var that = this;
 
+    //add calllback function to the masterplayer for when the current time changes.
     this.masterPlayer.currentTimeUpdateFunction = function(currentTime) {
         var duration = that.masterPlayer.getDuration();
 
@@ -30,12 +59,28 @@ MasterPlayerControls.prototype.generateControlsInDiv = function (idOfDiv) {
     };
 };
 
+
+/*
+createSingleAudioControl
+-----------
+
+output: create audio control of 1 single audio metadata stream.
+
+*/
 MasterPlayerControls.prototype.createSingleAudioControl = function(idOfDiv, audioObject, metaDataStreamerPlayer) {
     var audioControl = new StreamerPlayerControls(audioObject, metaDataStreamerPlayer);
 
     audioControl.generateControlsInDiv(idOfDiv);
 };
 
+
+/*
+createPlayPauseButtonInDiv
+-----------
+
+output: create a play button in th div
+
+*/
 MasterPlayerControls.prototype.createPlayPauseButtonInDiv = function(idOfDiv) {
     var that = this;
 
@@ -52,6 +97,14 @@ MasterPlayerControls.prototype.createPlayPauseButtonInDiv = function(idOfDiv) {
     document.getElementById(idOfDiv).appendChild(this.playButton);
 };
 
+
+/*
+createTimeSliderInDiv
+-----------
+
+output: create time slider in the div
+
+*/
 MasterPlayerControls.prototype.createTimeSliderInDiv = function(idOfDiv) {
     var that = this;
 
@@ -73,6 +126,14 @@ MasterPlayerControls.prototype.createTimeSliderInDiv = function(idOfDiv) {
     document.getElementById(idOfDiv).appendChild(that.timeSpan);
 };
 
+
+/*
+createVolumeSliderInDiv
+-----------
+
+output: create an audio volume slider in div
+
+*/
 MasterPlayerControls.prototype.createVolumeSliderInDiv = function(idOfDiv) {
 
     var that = this;
@@ -94,6 +155,13 @@ MasterPlayerControls.prototype.createVolumeSliderInDiv = function(idOfDiv) {
     document.getElementById(idOfDiv).appendChild(this.volumeSlider);
 };
 
+/*
+sliderChangeCallback
+-----------
+
+output: when the slider is adjusted adjust the current time of the master player
+
+*/
 MasterPlayerControls.prototype.sliderChangeCallback = function() {
     var duration = this.masterPlayer.getDuration();
     var valueOfSlider = this.slider.value;
@@ -102,6 +170,13 @@ MasterPlayerControls.prototype.sliderChangeCallback = function() {
     this.masterPlayer.setCurrentTime((valueOfSlider/100) * duration);
 };
 
+/*
+volumeSliderChangeCallback
+-----------
+
+output: when the volume slider is adjusted adjust the volume of the master player
+
+*/
 MasterPlayerControls.prototype.volumeSliderChangeCallback = function() {
     var valueOfSlider = this.volumeSlider.value;
     this.volumeSlider.blur();
@@ -109,6 +184,14 @@ MasterPlayerControls.prototype.volumeSliderChangeCallback = function() {
     this.masterPlayer.setMasterVolume(valueOfSlider);
 };
 
+
+/*
+playPauseButtonCallback
+-----------
+
+output: when the play pause button is pressed, play/pause the master player
+
+*/
 MasterPlayerControls.prototype.playPauseButtonCallback = function() {
 
     if (this.masterPlayer.isPlaying()) {

@@ -1,3 +1,21 @@
+/*
+MetaDataStreamer-class
+----------------------
+
+This class organizes the metadata and fetches them
+*/
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    shakaAdaptionSet - the adaptionset provided by the shaka mpd parser.
+    onReadyCallBack - callback function that is called when the initial metadata is fetched and the MetaDataStreamer is ready to fetch more meta data.
+output:
+    MetaDataStreamer-object
+*/
+
 var MetaDataStreamer = function(shakaAdaptionSet, onReadyCallBack) {
     var metaDatas = [];
     this.initUrl = shakaAdaptionSet.streamInfos[0].segmentInitializationInfo.url.getDomain() + shakaAdaptionSet.streamInfos[0].segmentInitializationInfo.url.getPath();
@@ -10,6 +28,7 @@ var MetaDataStreamer = function(shakaAdaptionSet, onReadyCallBack) {
 
     var that = this;
 
+    //fetch initial meta data and cll the callback function
     this.initStream().then(function() {
         onReadyCallBack(that);
     });
@@ -22,6 +41,7 @@ MetaDataStreamer.prototype.appendMetaData = function(newMetaData) {
 MetaDataStreamer.prototype.initStream = function() {
     var that = this;
 
+    //create promise that will resolve when the inital meta data is fetched
     return new Promise(function(resolve, reject) {
         that.getData(that.initUrl).then(function(data) {
             that.initData = data;
@@ -34,6 +54,7 @@ MetaDataStreamer.prototype.initStream = function() {
 MetaDataStreamer.prototype.getNextSegment = function () {
     var that = this;
 
+    //return a pomise that will resolve upon fetching an adding the meta data segment to the list of meta data's
     return new Promise(function(resolve, reject) {
         if (that.segments.length > that.segmentsLoaded-1) {
             var segment = that.segments[that.segmentsLoaded-1];

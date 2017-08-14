@@ -1,3 +1,22 @@
+/*
+MetaDataStreamerPlayer Class
+
+This class is used to play a MetaDataStream and to apply the meta data on an audio object
+*/
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    audioObject - audio object to alter with new metadata while playing,
+    metaDataStreamer - that has to be played by this player,
+    audioContext - context to play audio in,
+    masterPlayer - masterplayer that created him
+
+output: MetaDataStreamerPlayer-object that can playback the metaData from a metaDataStreamer-object.
+
+*/
 var MetaDataStreamerPlayer = function( audioObject, metaDataStreamer, audioContext, masterPlayer) {
     this.audioContext = audioContext;
     this.metaDataStreamer = metaDataStreamer;
@@ -10,10 +29,25 @@ var MetaDataStreamerPlayer = function( audioObject, metaDataStreamer, audioConte
     this.manualMode = false;
 };
 
+/*
+isInManualMode
+-----------
+
+output: is the player overriden by an outside force, whn it is it will no longer send out updates of the position.
+
+*/
 MetaDataStreamerPlayer.prototype.isInManualMode = function() {
     return this.manualMode;
 };
 
+
+/*
+setOnUpdateCallback
+-----------
+
+output: set a callback function upon to let other applications, outside this one, use the metadata
+
+*/
 MetaDataStreamerPlayer.prototype.setOnUpdateCallback = function (callback) {
     this.onUpdateCallback = callback;
 };
@@ -29,12 +63,26 @@ MetaDataStreamerPlayer.prototype.setManualMode = function(value) {
     this.manualMode = value;
 };
 
+/*
+manualMove
+-----------
+
+output: set a new position of the audio source to move it from outside the application.
+
+*/
 MetaDataStreamerPlayer.prototype.manualMove = function(position) {
     if (this.manualMode) {
         this.audioObject.getPannerNode().setPosition(position.x,position.y,position.z);
     }
 };
 
+/*
+play
+-----------
+
+output: set an interval and let it update the audioObject and call the callback function to outside of this application.
+
+*/
 MetaDataStreamerPlayer.prototype.play = function () {
     var that = this;
 

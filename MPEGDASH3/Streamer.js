@@ -1,3 +1,18 @@
+/*
+Streamer-class
+--------------
+
+This class is responsible for the process and organization of the audio data.
+*/
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    shakaAdaptionSet - the shakaAdaptionSet from the shaka mpd parser
+    onReadyCallBack - when al representations are ready and loaded the callback function will be called.
+*/
 var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
     var that = this;
 
@@ -47,16 +62,26 @@ Streamer.prototype.getDuration = function() {
     return this.getAudioElement().duration;
 };
 
+/*
+setCurrentTime
+--------------
+
+sets the segment to load to the correct index.
+sets the position on the audio element to the givin position
+*/
 Streamer.prototype.setCurrentTime = function(newCurrentTime) {
     this.segmentToLoad = this.representations[this.activeRepresentation].getSegmentIndexOnTime(newCurrentTime);
 
+    //take the segment index before the current segment index to prevent problems in the playback.
     if (this.segmentToLoad > 0) {
         this.segmentToLoad = this.segmentToLoad - 1;
     }
 
+    //check if the new date is within the duration.
     if (this.getDuration() > newCurrentTime) {
         this.getAudioElement().currentTime = newCurrentTime;
     } else {
+        //if the duration is not yet set, that means it starts from the begining
         if (isNaN(this.getDuration())) {
             this.getAudioElement().currentTime = 0;
         } else {

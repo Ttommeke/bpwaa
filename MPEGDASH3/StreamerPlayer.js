@@ -1,4 +1,20 @@
+/*
+StreamerPlayer-class
+--------------
 
+This class is responsible for playing an audio
+*/
+
+/*
+CONSTRUCTOR
+-----------
+
+input:
+    stream - Streamer-object that has to be played!
+    audioContext - audioContext used to play the audio within
+    contPlayCallback - called when the audio playback is running out of audio data.
+    canPlayCallback - called when the audio is back ready to be played
+*/
 var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCallback) {
     this.stream = stream;
     this.audioContext = audioContext;
@@ -11,6 +27,7 @@ var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCal
 
     var that = this;
 
+    //connecting the out of data event to the cantPlayCallback
     this.stream.getAudioElement().addEventListener("waiting", function() {
         if (!that.canPlay()) {
             cantPlayCallback();
@@ -18,6 +35,7 @@ var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCal
         }
     });
 
+    //connecting the canplay event to the canPlayCallback
     this.stream.getAudioElement().addEventListener("canplay", function() {
         canPlayCallback();
     });

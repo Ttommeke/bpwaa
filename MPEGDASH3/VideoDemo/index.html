@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset=utf-8>
+		<title>MapViewer</title>
+
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+
+			#forControls {
+				position: absolute;
+				bottom: 10px;
+			}
+		</style>
+		<script src="../mapviewer/build/three.js"></script>
+		<script src="../mapviewer/build/jquery-1.11.1.min.js"></script>
+		<script src="../mapviewer/build/jquery-ui.min.js"></script>
+		<script src="../mapviewer/build/jquery.mobile-1.4.5.min.js"></script>
+		<script src="../mapviewer/build/stats.min.js"></script>
+		<script src="../mapviewer/js/events.js"></script>
+		<script src="../mapviewer/js/camera.js"></script>
+		<script src="../mapviewer/js/living.js"></script>
+		<script src="../mapviewer/js/player.js"></script>
+		<script src="../mapviewer/js/light.js"></script>
+		<script src="../mapviewer/js/map.js"></script>
+		<script src="../mapviewer/js/entity.js"></script>
+		<script src="../mapviewer/js/utils.js"></script>
+		<script src="../mapviewer/js/SoundCube.js"></script>
+		<script src="../mapviewer/js/mouseselect.js"></script>
+
+        <script type="text/javascript" src="/non_npm_dependencies/parser.js"></script>
+	    <script src="../AudioObject.js"></script>
+	    <script src="../Streamer.js"></script>
+	    <script src="../MetaDataStreamer.js"></script>
+	    <script src="../StreamerPlayer.js"></script>
+	    <script src="../Representation.js"></script>
+	    <script src="../Period.js"></script>
+	    <script src="../MasterPlayer.js"></script>
+	    <script src="../MetaDataStreamerPlayer.js"></script>
+	    <script src="../MasterPlayerControls.js"></script>
+	    <script src="../StreamerPlayerControls.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	</head>
+	<body id="bodyId" onkeydown="Events.keyDownEvent(event)" onkeyup="Events.keyUpEvent(event)">
+		<div id="forControls"></div>
+	</body>
+	<script src="js/base.js"></script>
+</html>

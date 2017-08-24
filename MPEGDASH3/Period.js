@@ -21,6 +21,7 @@ output:
 */
 var Period = function(shakaPeriod, onReadyCallBack) {
     this.streams = [];
+    this.videoStreams = [];
     this.metaDataStreams = [];
     this.duration = shakaPeriod.duration;
 
@@ -38,9 +39,18 @@ var Period = function(shakaPeriod, onReadyCallBack) {
                     onReadyCallBack();
                 }
             });
-        } else {
+        } else if (shakaPeriod.streamSetInfos[i].contentType == "audio") {
             //create audiodatastream and add it to the list of audio streams
             this.addStreamFromAdaptionSet(shakaPeriod.streamSetInfos[i]).then(function() {
+                totalStreamsParsed++;
+
+                if (totalStreamsParsed >= totalStreamsToParse) {
+                    onReadyCallBack();
+                }
+            });
+        } else if (shakaPeriod.streamSetInfos[i].contentType == "video") {
+            //create videodatastream and add it to the list of video streams
+            this.addVideoStreamFromAdaptionSet(shakaPeriod.streamSetInfos[i]).then(function() {
                 totalStreamsParsed++;
 
                 if (totalStreamsParsed >= totalStreamsToParse) {
@@ -136,6 +146,18 @@ Period.prototype.addStreamFromAdaptionSet = function(shakaAdaptionSet) {
 
     return new Promise(function(resolve, reject) {
         that.streams.push(new Streamer(shakaAdaptionSet, function() {
+            resolve();
+        }));
+    });
+
+};
+
+Period.prototype.addVideoStreamFromAdaptionSet = function(shakaAdaptionSet) {
+
+    var that = this;
+
+    return new Promise(function(resolve, reject) {
+        that.videoStreams.push(new VideoStreamer(shakaAdaptionSet, function() {
             resolve();
         }));
     });

@@ -1,0 +1,24 @@
+{
+    "title": "Foo Fighters",
+    "description": "This is the audio source for the Foo Fighters!",
+    "channels": [
+        {
+            "type": "STREAM",
+            "id": "Foo Fighters",
+            "outputChannelIndex": 0,
+            "inputChannelIndex": 0,
+            "volume": 1,
+            "delay": 1
+        },{
+            "type": "STREAM",
+            "id": "Foo Fighters",
+            "outputChannelIndex": 1,
+            "inputChannelIndex": 1,
+            "volume": 1
+        }
+    ],
+    "x": 7,
+    "y": 0,
+    "z": 6,
+    "moment": 0
+}

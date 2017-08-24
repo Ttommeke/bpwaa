@@ -25,6 +25,7 @@ when it is back ready to play audio. The MasterPlayer will resume then.
 var MasterPlayer = function(period) {
     //list of all the StreamerPlayers, MetaDataStreamerPlayers and AudioObjects
     this.streamerPlayers = [];
+    this.videoStreamerPlayers = [];
     this.metaDataStreamerPlayers = [];
     this.audioObjects = [];
     //Period object that needs to be played.
@@ -82,6 +83,13 @@ var MasterPlayer = function(period) {
             }
         }
 
+        for (var i = 0; i < that.videoStreamerPlayers.length; i++) {
+            if (!that.videoStreamerPlayers[i].canPlay()) {
+                console.log("one is not ready...");
+                everythingReady = false;
+            }
+        }
+
         //if all streamerplayers are ready to play and the player was playing before a forced stop restart.
         if (everythingReady && that.playingBeforeFocedPause) {
             that.play();
@@ -96,6 +104,13 @@ var MasterPlayer = function(period) {
         var stream = period.streams[i];
         //create streamerplayers and add them to the array of streamerplayers
         this.streamerPlayers.push(new StreamerPlayer(stream, this.audioContext, cantPlayCallback, canPlayCallback));
+    }
+
+    //itterate over all the streams in the period to create StreamerPlayers.
+    for (var i = 0; i < period.videoStreams.length; i++) {
+        var stream = period.videoStreams[i];
+        //create streamerplayers and add them to the array of streamerplayers
+        this.videoStreamerPlayers.push(new VideoStreamerPlayer(stream, cantPlayCallback, canPlayCallback));
     }
 
     //itterate over all metadatastreams
@@ -187,6 +202,10 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].setCurrentTime(newCurrentTime);
     }
+    //adjust al the videoStreamerPlayers to a new position.
+    for (var i = 0; i < this.videoStreamerPlayers.length; i++) {
+        this.videoStreamerPlayers[i].setCurrentTime(newCurrentTime);
+    }
     //restart the buffering process of a period to make sure new data is getting ready for the new position.
     this.period.startBufferProccess();
 
@@ -218,9 +237,18 @@ MasterPlayer.prototype.play = function() {
         this.streamerPlayers[i].setCurrentTime(currentTime);
     }
 
+    for (var i = 0; i < this.videoStreamerPlayers.length; i++) {
+        this.videoStreamerPlayers[i].setCurrentTime(currentTime);
+    }
+
     //start all streamerPlayers
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].play();
+    }
+
+    //start all videoStreamerPlayers
+    for (var i = 0; i < this.videoStreamerPlayers.length; i++) {
+        this.videoStreamerPlayers[i].play();
     }
 
     //start all metaDataStreamerPlayers
@@ -283,6 +311,11 @@ MasterPlayer.prototype.pause = function() {
     //pause all the streamerplayers
     for (var i = 0; i < this.streamerPlayers.length; i++) {
         this.streamerPlayers[i].pause();
+    }
+
+    //pause all the videoStreamerplayers
+    for (var i = 0; i < this.videoStreamerPlayers.length; i++) {
+        this.videoStreamerPlayers[i].pause();
     }
 
     //pause aal the metadatastreamerplayers

@@ -11,27 +11,32 @@ let amountOfFiles = amountOfPositions / positionsPerFile;
 
 let positions = [];
 
-let yPosition = 0;
+let lastPosition = {
+    x: 7,
+    y: 0,
+    z: 7,
+};
 
 for (let i = 0; i < amountOfPositions; i++) {
     let generatedPos = {
             "x": Math.random() * 13,
-            "y": yPosition,
+            "y": lastPosition.y,
             "z": Math.random() * 13,
             "movementType": "lineair",
             "moment": i*secondsBetweenPositions
         };
 
     positions.push(generatedPos);
+
+    lastPosition = positions[positions.length - 1];
 }
 
 for (let j = 0; j < amountOfFiles; j++) {
-    fs.writeFile(outputFolder + "/seg-" + (j + 1) + ".json", JSON.stringify(positions.slice(j*positionsPerFile, (j+1)*positionsPerFile)), function(err) {
+    fs.writeFile(outputFolder + "/seg-" + (j + 1) + ".json", JSON.stringify(positions.slice(j*positionsPerFile, j*positionsPerFile + positionsPerFile)), function(err) {
         if(err) {
             return console.log(err);
         }
 
         console.log("The file, " + outputFolder + "/seg-" + (j + 1) + ".json" + " was saved!");
-        console.log("----", (j+1)*positionsPerFile - j*positionsPerFile, "positions saved.");
     });
 }

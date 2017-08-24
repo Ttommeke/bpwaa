@@ -32,7 +32,7 @@ for (let i = 0; i < amountOfPositions; i++) {
 }
 
 for (let j = 0; j < amountOfFiles; j++) {
-    fs.writeFile(outputFolder + "/seg-" + (j + 1) + ".json", JSON.stringify(positions.slice(j*positionsPerFile, j*positionsPerFile + positionsPerFile)), function(err) {
+    fs.writeFile(outputFolder + "/seg-" + (j + 1) + ".json", JSON.stringify(positions.slice(j*positionsPerFile, (j+1)*positionsPerFile)), function(err) {
         if(err) {
             return console.log(err);
         }

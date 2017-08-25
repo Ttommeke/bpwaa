@@ -1,0 +1,17 @@
+{
+    "title": "forward",
+    "description": "This is the sound you will hear in front of you!",
+    "channels": [
+        {
+            "type": "GENERATED",
+            "frequency": 200,
+            "waveType": "sawtooth",
+            "inputChannelIndex": 0,
+            "volume": 0.2
+        }
+    ],
+    "x": 0,
+    "y": 0,
+    "z": -5,
+    "moment": 0
+}

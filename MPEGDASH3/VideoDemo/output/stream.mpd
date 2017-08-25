@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<MPD id="c4ec03c1-583d-435b-9d53-fb68bd8711d8" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-11-13T15:18:48.000Z" publishTime="2015-11-13T15:19:45.000Z" mediaPresentationDuration="P0Y0M0DT0H8M48.000S" minBufferTime="P0Y0M0DT0H0M1.000S" bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">
+<MPD id="940846fd-13ad-4fc5-a249-1cb2f0019bec" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-11-16T16:14:32.000Z" publishTime="2015-11-16T16:15:09.000Z" mediaPresentationDuration="P0Y0M0DT0H7M20.000S" minBufferTime="P0Y0M0DT0H0M1.000S" bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">
     <Period>
         <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d">
             <SegmentTemplate media="video/$RepresentationID$/segment_$Number$.m4s" initialization="video/$RepresentationID$/init.mp4" duration="50000" startNumber="0" timescale="25000"/>
+            <Representation id="2160_9600000" bandwidth="9600000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_1200000" bandwidth="1200000" width="3840" height="2160" frameRate="25"/>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Foo Fighters_metadata">
+            <SegmentTemplate duration="40000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/forward"></Representation>
         </AdaptationSet>
     </Period>
 </MPD>

@@ -32,6 +32,8 @@ var VideoStreamerPlayer = function(stream, cantPlayCallback, canPlayCallback) {
     this.stream.getVideoElement().addEventListener("canplay", function() {
         canPlayCallback();
     });
+
+    //document.getElementById("bodyId").appendChild(this.stream.getVideoElement());
 };
 
 VideoStreamerPlayer.prototype.canPlay = function() {

@@ -23,8 +23,8 @@ var VideoStreamer = function( shakaAdaptionSet, onReadyCallBack) {
     this.representations = [];
     this.activeRepresentation = 0;
 
-    that.audioElement = document.createElement("VIDEO");
-    that.audioElement.src = URL.createObjectURL(that.mediaSource);
+    that.videoElement = document.createElement("VIDEO");
+    that.videoElement.src = URL.createObjectURL(that.mediaSource);
 
     that.mediaSource.addEventListener('sourceopen', function() {
 
@@ -46,20 +46,20 @@ var VideoStreamer = function( shakaAdaptionSet, onReadyCallBack) {
 };
 
 VideoStreamer.prototype.getActiveTimeRangeId = function() {
-    var timeRanges = this.audioElement.buffered;
+    var timeRanges = this.videoElement.buffered;
     return 0;
 };
 
 VideoStreamer.prototype.getTimeBuffered = function() {
 
-    if (this.audioElement.buffered.length == 0) {
+    if (this.videoElement.buffered.length == 0) {
         return 0;
     }
-    return this.audioElement.buffered.end(this.getActiveTimeRangeId());
+    return this.videoElement.buffered.end(this.getActiveTimeRangeId());
 };
 
 VideoStreamer.prototype.getDuration = function() {
-    return this.getAudioElement().duration;
+    return this.getVideoElement().duration;
 };
 
 /*
@@ -79,13 +79,13 @@ VideoStreamer.prototype.setCurrentTime = function(newCurrentTime) {
 
     //check if the new date is within the duration.
     if (this.getDuration() > newCurrentTime) {
-        this.getAudioElement().currentTime = newCurrentTime;
+        this.getVideoElement().currentTime = newCurrentTime;
     } else {
         //if the duration is not yet set, that means it starts from the begining
         if (isNaN(this.getDuration())) {
-            this.getAudioElement().currentTime = 0;
+            this.getVideoElement().currentTime = 0;
         } else {
-            this.getAudioElement().currentTime = this.getDuration();
+            this.getVideoElement().currentTime = this.getDuration();
         }
     }
 };
@@ -96,12 +96,8 @@ VideoStreamer.prototype.addRepresentation = function(shakaRepresentation) {
     return new Promise(function(resolve, reject) {
         var sourceBuffer = undefined;
 
-        if (navigator.userAgent.search("Firefox") > -1) {
-            sourceBuffer = that.mediaSource.addSourceBuffer('video/mp4');
-        } else if (navigator.userAgent.search("Chrome") > -1) {
-            sourceBuffer = that.mediaSource.addSourceBuffer('video/mp4');
-        }
-
+        console.log(shakaRepresentation.mimeType + '; codecs="' + shakaRepresentation.codecs + '"');
+        sourceBuffer = that.mediaSource.addSourceBuffer(shakaRepresentation.mimeType + '; codecs="' + shakaRepresentation.codecs + '"');
 
         that.representations.push(new Representation(sourceBuffer, shakaRepresentation, function() {
             resolve();
@@ -125,5 +121,5 @@ VideoStreamer.prototype.getNextSegment = function() {
 };
 
 VideoStreamer.prototype.getVideoElement = function () {
-    return this.audioElement;
+    return this.videoElement;
 };

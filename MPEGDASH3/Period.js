@@ -68,6 +68,7 @@ startBufferProccess
 By calling this method, the period will start buffering all the streams from there current position.
 */
 Period.prototype.startBufferProccess = function() {
+    console.log("Buffer start!");
 
     var that = this;
 
@@ -77,13 +78,33 @@ Period.prototype.startBufferProccess = function() {
         if (!that.isStreamRunningOutOfControl(stream)) {
             stream.getNextSegment().then(function() {
                 nextSegmentForAudio(stream);
-            }).catch(function() {
+            }).catch(function(error) {
+                console.log(stream.name);
+                console.log(error);
                 console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
             });
         } else {
             //when the stream is running out of control it is put to sleep for 100 ms.
             //after that the process will start again by checking if the other streams have already caught up.
             setTimeout(function(){ nextSegmentForAudio(stream); }, 100);
+        }
+    };
+
+    //callbackfunction that will recursively fetch the next segment of video from the givin stream until all segments are fetched.
+    var nextSegmentForVideo = function(stream) {
+        //this check controls if an video stream is not to fast loading compared to the others.
+        if (!that.isStreamRunningOutOfControl(stream)) {
+            stream.getNextSegment().then(function() {
+                nextSegmentForVideo(stream);
+            }).catch(function(error) {
+                console.log(stream.name);
+                console.log(error);
+                console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
+            });
+        } else {
+            //when the stream is running out of control it is put to sleep for 100 ms.
+            //after that the process will start again by checking if the other streams have already caught up.
+            setTimeout(function(){ nextSegmentForVideo(stream); }, 100);
         }
     };
 
@@ -101,6 +122,11 @@ Period.prototype.startBufferProccess = function() {
         nextSegmentForAudio(this.streams[i]);
     }
 
+    //start all audio streams
+    for (var i = 0; i < this.videoStreams.length; i++) {
+        nextSegmentForVideo(this.videoStreams[i]);
+    }
+
     //start all metadata streams
     for (var i = 0; i < this.metaDataStreams.length; i++) {
         nextSegmentForMetaData(this.metaDataStreams[i]);
@@ -116,19 +142,28 @@ Compares all the other streams to this stream. when the stream that has the leas
 Period.prototype.isStreamRunningOutOfControl = function(stream) {
     var that = this;
 
-    var streamThatIsBehind = that.streams[0];
+    var streamThatIsBehind = undefined;
 
     //find stream that is farrest behind
     for (var i = 1; i < that.streams.length; i++) {
 
         //console.log(that.streams[i].getTimeBuffered(), that.streams[i].getDuration() );
-        if (that.streams[i].getTimeBuffered() < that.streams[i].getDuration() && that.streams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered()) {
+        if (streamThatIsBehind == undefined || (that.streams[i].getTimeBuffered() < that.streams[i].getDuration() && that.streams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered())) {
             streamThatIsBehind = that.streams[i];
         }
     }
 
+    //find video stream that is farrest behind
+    for (var i = 1; i < that.videoStreams.length; i++) {
+
+        //console.log(that.streams[i].getTimeBuffered(), that.streams[i].getDuration() );
+        if (streamThatIsBehind == undefined || (that.videoStreams[i].getTimeBuffered() < that.videoStreams[i].getDuration() && that.videoStreams[i].getTimeBuffered() < streamThatIsBehind.getTimeBuffered())) {
+            streamThatIsBehind = that.videoStreams[i];
+        }
+    }
+
     //check if stream is to far behind.
-    if (stream.getTimeBuffered() > streamThatIsBehind.getTimeBuffered() + OUT_OF_CONTROL_THRESHOLD) {
+    if (streamThatIsBehind !== undefined && stream.getTimeBuffered() > streamThatIsBehind.getTimeBuffered() + OUT_OF_CONTROL_THRESHOLD) {
         return true;
     } else {
         return false;

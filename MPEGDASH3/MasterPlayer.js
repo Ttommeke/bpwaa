@@ -124,6 +124,8 @@ var MasterPlayer = function(period) {
         //create and add metadata streamer player to list.
         this.metaDataStreamerPlayers.push(new MetaDataStreamerPlayer(audioObject, metaDataStreamer, this.audioContext, this));
     }
+
+    this.setCurrentTime(0);
 };
 
 /*

@@ -35,25 +35,25 @@ ODV.MouseController = function(par, moveFunction, scrollFunction)
 		{
 			var diffX = e.screenX-prevX;
 			var diffY = e.screenY-prevY;
-	
+
 			prevX = e.screenX;
 			prevY = e.screenY;
-	
+
 			if (diffX != 0 || diffY != 0)
 				onMoveIt(diffX, diffY);
 		}
 	}
-	
+
 	var onMouseOut = function(e)
 	{
 		prevX = -1;
 		prevY = -1;
 	}
-	
+
 	var onMouseWheel = function(e)
 	{
 		var val = 0;
-	
+
 		if (e.wheelDelta > 0)
 		{
 			val = 1;
@@ -62,17 +62,17 @@ ODV.MouseController = function(par, moveFunction, scrollFunction)
 		{
 			val = -1;
 		}
-	
+
 		if (val != 0)
 			onScrollWheel(val);
-	
+
 		e.preventDefault();
 	}
 
 	var onMouseWheelFF = function(e)
 	{
 		var val = 0;
-	
+
 		if (e.detail < 0)
 		{
 			val = 1;
@@ -81,10 +81,10 @@ ODV.MouseController = function(par, moveFunction, scrollFunction)
 		{
 			val = -1;
 		}
-	
+
 		if (val != 0)
 			onScrollWheel(val);
-	
+
 		e.preventDefault();
 	}
 
@@ -212,7 +212,7 @@ ODV.CanvasElement = function()
 	}
 }
 
-// videoWidth and videoHeight of the video element must be known! 
+// videoWidth and videoHeight of the video element must be known!
 ODV.PlanarRenderer = function(canvasElem, videoElem)
 {
 	var myVideo = videoElem;
@@ -324,7 +324,7 @@ ODV.PlanarRenderer = function(canvasElem, videoElem)
 			if (frameX1 > videoWidth)
 			{
 				var frac = 1.0-(frameX1-videoWidth)/windowWidth;
-					
+
 				outputWidth = Math.round(frac*outputWidth);
 
 				windowWidthLeft = frameX1-videoWidth;
@@ -332,8 +332,8 @@ ODV.PlanarRenderer = function(canvasElem, videoElem)
 				startPos = 0;
 			}
 
-			myContext.drawImage(myVideo, frameX0, frameY0, (frameX1-frameX0), (frameY1-frameY0), 
-					    canvasPos, outputYPos, outputWidth, outputHeight); 
+			myContext.drawImage(myVideo, frameX0, frameY0, (frameX1-frameX0), (frameY1-frameY0),
+					    canvasPos, outputYPos, outputWidth, outputHeight);
 
 			canvasPos += outputWidth;
 			i++;
@@ -360,7 +360,7 @@ ODV.PlanarRenderer = function(canvasElem, videoElem)
 	this.onScrollIt(0);
 }
 
-// videoWidth and videoHeight of the video element must be known! 
+// videoWidth and videoHeight of the video element must be known!
 ODV.SphereRenderer = function(canvasElem, videoElem)
 {
 	var myCanvas = canvasElem;
@@ -450,14 +450,14 @@ ODV.SphereRenderer = function(canvasElem, videoElem)
 	}
 }
 
-ODV.Viewer = function(videoID, containerID, delayMsec, w, h, use3D)
+ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D)
 {
-	var videoWidth = 0;	
+	var videoWidth = 0;
 	var videoHeight = 0;
 
 	var myCanvasElement = null;
 	var myCanvas = null;
-	var myVideo = null; 
+	var myVideo = videoElement;
 	var myTimer = null;
 	var mouseController = null;
 	var myRenderer = null;
@@ -545,12 +545,11 @@ ODV.Viewer = function(videoID, containerID, delayMsec, w, h, use3D)
 	if (myCanvasElement.create(containerID, containerWidth, containerHeight))
 	{
 		myCanvas = myCanvasElement.getCanvas();
-		myVideo = document.getElementById(videoID);
 		if (myVideo != null)
 		{
 			if (myVideo.width == 0) // we'll get an error otherwise in the WebGL case
 				myVideo.width = 10;
-					
+
 			if (myVideo.height == 0)
 				myVideo.height = 10;
 

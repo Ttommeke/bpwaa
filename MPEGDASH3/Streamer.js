@@ -96,12 +96,7 @@ Streamer.prototype.addRepresentation = function(shakaRepresentation) {
     return new Promise(function(resolve, reject) {
         var sourceBuffer = undefined;
 
-        if (navigator.userAgent.search("Firefox") > -1) {
-            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
-        } else if (navigator.userAgent.search("Chrome") > -1) {
-            sourceBuffer = that.mediaSource.addSourceBuffer('audio/mp4');
-        }
-
+        sourceBuffer = that.mediaSource.addSourceBuffer(shakaRepresentation.mimeType + '; codecs="' + shakaRepresentation.codecs + '"');
 
         that.representations.push(new Representation(sourceBuffer, shakaRepresentation, function() {
             resolve();
@@ -110,7 +105,6 @@ Streamer.prototype.addRepresentation = function(shakaRepresentation) {
 };
 
 Streamer.prototype.getNextSegment = function() {
-
     var that = this;
 
     return new Promise(function(resolve, reject) {
@@ -118,8 +112,8 @@ Streamer.prototype.getNextSegment = function() {
             that.segmentToLoad++;
 
             resolve(that);
-        }).catch(function() {
-            reject();
+        }).catch(function(error) {
+            reject(error);
         });
     });
 };

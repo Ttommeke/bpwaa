@@ -23,6 +23,10 @@ var Representation = function(sourceBuffer, shakaRepresentation, callbackWhenRea
 
     this.sourceBuffer = sourceBuffer;
 
+    this.waitForNextSegment = undefined;
+    this.waitForNextSegmentResolve = undefined;
+
+
     //get the initial data and call the callback function.
     this.initStream().then(function() {
         callbackWhenReady();
@@ -35,9 +39,9 @@ Representation.prototype.initStream = function() {
     //return a promise that is resolved when the initial data is downloaded and parsed.
     return new Promise(function(resolve, reject) {
         that.getData(that.initUrl).then(function(data) {
-            that.appendBuffer(data);
-
-            resolve();
+            that.appendBuffer(data).then(function() {
+                resolve();
+            });
         });
     });
 };
@@ -71,29 +75,57 @@ Representation.prototype.getSegmentIndexOnTime = function(time) {
 Representation.prototype.getSegment = function(index) {
     var that = this;
 
-    //returns a promise that is resolved upon downloading the audio and adding it to the sourceBuffer
-    return new Promise(function(resolve, reject) {
+    var fetchFunction = function(resolve, reject) {
+        that.waitForNextSegment = new Promise(function(resolve,reject) {
+            that.waitForNextSegmentResolve = resolve;
+        });
         if (that.segments.length >= index) {
             var segment = that.segments[index];
             var url = segment.url.getDomain() + segment.url.getPath();
 
             that.getData(url).then(function(data) {
-                that.appendBuffer(data);
 
+                return that.appendBuffer(data);
+            }).then(function() {
+                that.waitForNextSegmentResolve();
+                that.waitForNextSegment = undefined;
                 resolve();
-            }).catch(function() {
-                reject();
+            }).catch(function(error) {
+                that.waitForNextSegmentResolve();
+                that.waitForNextSegment = undefined;
+                reject(error);
             });
         } else {
             reject();
+        }
+    };
+
+    //returns a promise that is resolved upon downloading the audio and adding it to the sourceBuffer
+    return new Promise(function(resolve, reject) {
+        if (that.waitForNextSegment == undefined) {
+            fetchFunction(resolve,reject);
+        } else {
+            that.waitForNextSegment.then(function() {
+                fetchFunction(resolve,reject);
+            });
         }
     });
 };
 
 Representation.prototype.appendBuffer = function(data) {
-    if (data !== undefined) {
-        this.sourceBuffer.appendBuffer(data);
-    }
+
+    var that = this;
+
+    return new Promise(function(resolve,reject) {
+        if (data !== undefined) {
+            that.sourceBuffer.appendBuffer(data);
+            that.sourceBuffer.addEventListener('updateend', function() {
+                resolve();
+            }, false);
+        } else {
+            reject();
+        }
+    });
 };
 
 Representation.prototype.getData = function(url) {

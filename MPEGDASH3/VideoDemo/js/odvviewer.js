@@ -361,7 +361,7 @@ ODV.PlanarRenderer = function(canvasElem, videoElem)
 }
 
 // videoWidth and videoHeight of the video element must be known!
-ODV.SphereRenderer = function(canvasElem, videoElem)
+ODV.SphereRenderer = function(canvasElem, videoElem, onMoveCallBack)
 {
 	var myCanvas = canvasElem;
 	var myVideo = videoElem;
@@ -383,7 +383,9 @@ ODV.SphereRenderer = function(canvasElem, videoElem)
 	this.onMoveIt = function(dx, dy)
 	{
 		lon -= 0.1 * dx;
-		lat += 0.1 * dy;;
+		lat += 0.1 * dy;
+
+		onMoveCallBack(lon, lat);
 	}
 
 	this.onScrollIt = function(diff)
@@ -450,7 +452,7 @@ ODV.SphereRenderer = function(canvasElem, videoElem)
 	}
 }
 
-ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D)
+ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D, onMoveCallBack)
 {
 	var videoWidth = 0;
 	var videoHeight = 0;
@@ -485,7 +487,7 @@ ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D)
 				{
 					try
 					{
-						myRenderer = new ODV.SphereRenderer(myCanvas, myVideo);
+						myRenderer = new ODV.SphereRenderer(myCanvas, myVideo, onMoveCallBack);
 					}
 					catch(error)
 					{
@@ -568,12 +570,12 @@ ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D)
 
 ODV.odvViewerInstance = null;
 
-ODV.initViewer = function(videoID, containerID, updateMsec, containerWidth, containerHeight, use3D)
+ODV.initViewer = function(videoID, containerID, updateMsec, containerWidth, containerHeight, use3D, onMoveCallBack)
 {
 	if (ODV.odvViewerInstance != null)
 		return;
 
-	ODV.odvViewerInstance = new ODV.Viewer(videoID, containerID, updateMsec, containerWidth, containerHeight, use3D);
+	ODV.odvViewerInstance = new ODV.Viewer(videoID, containerID, updateMsec, containerWidth, containerHeight, use3D, onMoveCallBack);
 }
 
 ODV.clearViewer = function()

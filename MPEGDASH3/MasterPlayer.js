@@ -122,7 +122,7 @@ var MasterPlayer = function(period) {
         //add audioObject to the list
         this.audioObjects.push(audioObject);
         //create and add metadata streamer player to list.
-        this.metaDataStreamerPlayers.push(new MetaDataStreamerPlayer(audioObject, metaDataStreamer, this.audioContext, this));
+        this.metaDataStreamerPlayers.push(new MetaDataStreamerPlayer(audioObject, metaDataStreamer, this));
     }
 
     this.setCurrentTime(0);

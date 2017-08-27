@@ -17,8 +17,7 @@ input:
 output: MetaDataStreamerPlayer-object that can playback the metaData from a metaDataStreamer-object.
 
 */
-var MetaDataStreamerPlayer = function( audioObject, metaDataStreamer, audioContext, masterPlayer) {
-    this.audioContext = audioContext;
+var MetaDataStreamerPlayer = function( audioObject, metaDataStreamer, masterPlayer) {
     this.metaDataStreamer = metaDataStreamer;
     this.audioObject = audioObject;
     this.onUpdateCallback = function(dummyEvent) {};

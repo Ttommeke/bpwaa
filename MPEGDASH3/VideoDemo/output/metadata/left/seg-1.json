@@ -1,0 +1,9 @@
+[
+    {
+        "x": -5,
+        "y": 0,
+        "z": 0,
+        "movementType": "lineair",
+        "moment": 0
+    }
+]

@@ -213,7 +213,7 @@ ODV.CanvasElement = function()
 }
 
 // videoWidth and videoHeight of the video element must be known!
-ODV.PlanarRenderer = function(canvasElem, videoElem)
+ODV.PlanarRenderer = function(canvasElem, videoElem, onMoveCallBack)
 {
 	var myVideo = videoElem;
 	var myCanvas = canvasElem;
@@ -233,6 +233,14 @@ ODV.PlanarRenderer = function(canvasElem, videoElem)
 	{
 		videoXstart -= Math.round((dx*scrollScale)*windowScale);
 		videoYstart -= Math.round((dy*scrollScale)*windowScale);
+
+		var centerX = videoXstart + windowWidth/2;
+		var centerY = videoYstart + windowHeight/2;
+
+		var lonPercantage = (centerX / videoWidth) - 0.5;
+		var latPercentage = (centerY / videoHeight) - 0.5;
+
+		onMoveCallBack(lonPercantage * 360, latPercentage * 180);
 	}
 
 	this.onScrollIt = function(diff)
@@ -492,12 +500,12 @@ ODV.Viewer = function(videoElement, containerID, delayMsec, w, h, use3D, onMoveC
 					catch(error)
 					{
 						console.log("Couldn't create WebGL based viewer: ", error);
-						myRenderer = new ODV.PlanarRenderer(myCanvas, myVideo);
+						myRenderer = new ODV.PlanarRenderer(myCanvas, myVideo, onMoveCallBack);
 					}
 				}
 				else
 				{
-					myRenderer = new ODV.PlanarRenderer(myCanvas, myVideo);
+					myRenderer = new ODV.PlanarRenderer(myCanvas, myVideo, onMoveCallBack);
 				}
 
 				mouseController = new ODV.MouseController(myCanvas, myRenderer.onMoveIt, myRenderer.onScrollIt);

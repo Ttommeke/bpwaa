@@ -1,17 +1,17 @@
 {
-    "title": "forward",
-    "description": "This is the sound you will hear in front of you!",
+    "title": "right",
+    "description": "This is the sound you will hear from the right!",
     "channels": [
         {
             "type": "STREAM",
             "id": "bbc_audio",
-            "outputChannelIndex": 0,
+            "outputChannelIndex": 3,
             "inputChannelIndex": 0,
             "volume": 1
         }
     ],
-    "x": 0,
+    "x": 5,
     "y": 0,
-    "z": -5,
+    "z": 0,
     "moment": 0
 }

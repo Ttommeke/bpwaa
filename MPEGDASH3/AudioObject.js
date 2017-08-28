@@ -92,6 +92,7 @@ AudioObject.prototype.connectStreamerPlayerChannels = function (streamerPlayers,
         //if type is generated, create the sound and connect it to the channel.
         } else if (channel.type == "GENERATED") {
             var generattedNode = new GeneratedAudioObjectChannel(channel, that.audioContext);
+            generattedNode.pause();
             generattedNode.getEndNode().connect(that.channelMerger, 0, channel.inputChannelIndex);
             that.generatedNodes.push(generattedNode);
         }

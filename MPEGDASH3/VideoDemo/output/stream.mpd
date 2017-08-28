@@ -4,12 +4,34 @@
         <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d">
             <SegmentTemplate media="video/$RepresentationID$/segment_$Number$.m4s" initialization="video/$RepresentationID$/init.mp4" duration="50000" startNumber="0" timescale="25000"/>
             <Representation id="2160_9600000" bandwidth="9600000" width="3840" height="2160" frameRate="25"/>
+            <Representation id="2160_4800000" bandwidth="4800000" width="3840" height="2160" frameRate="25"/>
+            <Representation id="2160_2400000" bandwidth="2400000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_1200000" bandwidth="1200000" width="3840" height="2160" frameRate="25"/>
         </AdaptationSet>
+        <AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="english stereo" id="bbc_audio">
+            <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+            <SegmentTemplate media="audio/$RepresentationID$/segment_$Number$.m4s" initialization="audio/$RepresentationID$/init.mp4" duration="88023" startNumber="0" timescale="44100"/>
+            <Representation id="1_stereo_192000" bandwidth="192000" audioSamplingRate="44100"/>
+        </AdaptationSet>
 
-        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Foo Fighters_metadata">
-            <SegmentTemplate duration="40000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_forward_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
             <Representation bandwidth="100" id="metadata/forward"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_backward_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/backward"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_left_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/left"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_right_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/right"></Representation>
         </AdaptationSet>
     </Period>
 </MPD>

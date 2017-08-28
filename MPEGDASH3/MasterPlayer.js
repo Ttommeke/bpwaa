@@ -229,10 +229,10 @@ Starts the interval to detect the end of the audio and call a stop and to send o
 
 */
 MasterPlayer.prototype.play = function() {
-    this.playing = true;
-
     //reset all streamerPlayers to the same point in time.
     var currentTime = this.getCurrentTime();
+
+    this.playing = true;
 
     //set the new position of the streamerplayers to the current time to mimize the chanche of them going out of sync
     for (var i = 0; i < this.streamerPlayers.length; i++) {

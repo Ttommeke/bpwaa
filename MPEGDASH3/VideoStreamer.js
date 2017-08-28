@@ -90,6 +90,10 @@ VideoStreamer.prototype.setCurrentTime = function(newCurrentTime) {
     }
 };
 
+VideoStreamer.prototype.getCurrentTime = function() {
+    return this.getVideoElement().currentTime;
+};
+
 VideoStreamer.prototype.addRepresentation = function(shakaRepresentation) {
     var that = this;
 

@@ -90,6 +90,10 @@ Streamer.prototype.setCurrentTime = function(newCurrentTime) {
     }
 };
 
+Streamer.prototype.getCurrentTime = function() {
+    return this.getAudioElement().currentTime;
+};
+
 Streamer.prototype.addRepresentation = function(shakaRepresentation) {
     var that = this;
 

@@ -7,7 +7,8 @@ This class represents a period in the mpd file. it will organize the streams.
 for example it will suspend a stream that is far ahead of the other streams.
 */
 
-var OUT_OF_CONTROL_THRESHOLD = 30; //30 seconden
+var OUT_OF_CONTROL_THRESHOLD = 10; //10 seconds
+var BUFFERED_THRESHOLD = 30; //30 seconds
 
 /*
 CONSTRUCTOR
@@ -68,14 +69,13 @@ startBufferProccess
 By calling this method, the period will start buffering all the streams from there current position.
 */
 Period.prototype.startBufferProccess = function() {
-    console.log("Buffer start!");
 
     var that = this;
 
     //callbackfunction that will recursively fetch the next segment of audio from the givin stream until all segments are fetched.
     var nextSegmentForAudio = function(stream) {
         //this check controls if an audio stream is not to fast loading compared to the others.
-        if (!that.isStreamRunningOutOfControl(stream)) {
+        if (!that.isStreamRunningOutOfControl(stream) && !that.isStreamBufferdFarEnough(stream)) {
             stream.getNextSegment().then(function() {
                 nextSegmentForAudio(stream);
             }).catch(function(error) {
@@ -93,7 +93,7 @@ Period.prototype.startBufferProccess = function() {
     //callbackfunction that will recursively fetch the next segment of video from the givin stream until all segments are fetched.
     var nextSegmentForVideo = function(stream) {
         //this check controls if an video stream is not to fast loading compared to the others.
-        if (!that.isStreamRunningOutOfControl(stream)) {
+        if (!that.isStreamRunningOutOfControl(stream) && !that.isStreamBufferdFarEnough(stream)) {
             stream.getNextSegment().then(function() {
                 nextSegmentForVideo(stream);
             }).catch(function(error) {
@@ -102,9 +102,9 @@ Period.prototype.startBufferProccess = function() {
                 console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
             });
         } else {
-            //when the stream is running out of control it is put to sleep for 100 ms.
+            //when the stream is running out of control it is put to sleep for 500 ms.
             //after that the process will start again by checking if the other streams have already caught up.
-            setTimeout(function(){ nextSegmentForVideo(stream); }, 100);
+            setTimeout(function(){ nextSegmentForVideo(stream); }, 500);
         }
     };
 
@@ -169,6 +169,16 @@ Period.prototype.isStreamRunningOutOfControl = function(stream) {
         return false;
     }
 }
+
+Period.prototype.isStreamBufferdFarEnough = function(stream) {
+    var lengthBufferd = stream.getTimeBuffered() - stream.getCurrentTime();
+
+    if (lengthBufferd >= BUFFERED_THRESHOLD) {
+        return true;
+    } else {
+        return false;
+    }
+};
 
 
 Period.prototype.getDuration = function() {

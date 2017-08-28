@@ -103,7 +103,19 @@ MetaDataStreamerPlayer.prototype.play = function () {
 
             that.audioObject.getPannerNode().setPosition(x,y,z);
 
-            that.onUpdateCallback({ currentTime: currentTime, before: before, after: after, initData: that.metaDataStreamer.initData });
+            that.onUpdateCallback(
+                {
+                    currentTime: currentTime,
+                    before: before,
+                    after: after,
+                    initData: that.metaDataStreamer.initData,
+                    currentPosition: {
+                        "x": x,
+                        "y": y,
+                        "z": z
+                    }
+                }
+            );
         }
 
     }, 50);

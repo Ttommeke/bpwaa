@@ -118,7 +118,6 @@ var MasterPlayer = function(period) {
         //create an AudioObject for every metadatastream
         var metaDataStreamer = period.metaDataStreams[j];
         var audioObject = this.generateAudioObjectFromMetaDataStreamer(metaDataStreamer);
-
         //add audioObject to the list
         this.audioObjects.push(audioObject);
         //create and add metadata streamer player to list.

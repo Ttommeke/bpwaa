@@ -16,13 +16,14 @@ getMpdFile("/MPEGDASH3/VideoDemo/output/stream.mpd").then(function(mpd) {
 
     var period = new Period(periods[0], function() {
 
+
         masterPlayer = new MasterPlayer(period);
 		masterPlayerControls = new MasterPlayerControls(masterPlayer);
 
 		masterPlayerControls.generateControlsInDiv("forControls");
 
 		var videoElement = masterPlayer.videoStreamerPlayers[0].stream.getVideoElement();
-		ODV.initViewer(videoElement, "3DVideo", 50, 640, 480, false, function(lon,lat) {
+		ODV.initViewer(videoElement, "3DVideo", 50, 640, 480, true, function(lon,lat) {
             var lonRad = (lon/180)*Math.PI;
             var latRad = (lat/180)*Math.PI;
 
@@ -42,6 +43,8 @@ getMpdFile("/MPEGDASH3/VideoDemo/output/stream.mpd").then(function(mpd) {
                 y: lengthToHeadOnY,
                 z: lengthToHeadOnXZ * Math.cos(lonRad)
             };
+
+            console.log(noseOrientation);
 
             masterPlayer.audioContext.listener.setOrientation(
                 noseOrientation.x,

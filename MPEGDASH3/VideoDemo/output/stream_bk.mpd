@@ -23,5 +23,15 @@
             <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
             <Representation bandwidth="100" id="metadata/backward"></Representation>
         </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_left_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/left"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_right_metadata">
+            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/right"></Representation>
+        </AdaptationSet>
     </Period>
 </MPD>

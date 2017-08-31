@@ -9,12 +9,6 @@
             "outputChannelIndex": 0,
             "inputChannelIndex": 0,
             "volume": 1
-        },{
-            "type": "STREAM",
-            "id": "Arctic Monkeys",
-            "outputChannelIndex": 1,
-            "inputChannelIndex": 1,
-            "volume": 1
         }
     ],
     "x": 1,

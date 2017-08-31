@@ -9,12 +9,6 @@
             "inputChannelIndex": 0,
             "volume": 1,
             "delay": 1
-        },{
-            "type": "STREAM",
-            "id": "Foo Fighters",
-            "outputChannelIndex": 1,
-            "inputChannelIndex": 1,
-            "volume": 1
         }
     ],
     "x": 7,

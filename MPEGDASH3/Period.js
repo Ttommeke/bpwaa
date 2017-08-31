@@ -79,6 +79,7 @@ Period.prototype.startBufferProccess = function() {
             stream.getNextSegment().then(function() {
                 nextSegmentForAudio(stream);
             }).catch(function(error) {
+                setTimeout(function(){ nextSegmentForAudio(stream); }, 300);
                 console.log(stream.name);
                 console.log(error);
                 console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
@@ -86,7 +87,7 @@ Period.prototype.startBufferProccess = function() {
         } else {
             //when the stream is running out of control it is put to sleep for 100 ms.
             //after that the process will start again by checking if the other streams have already caught up.
-            setTimeout(function(){ nextSegmentForAudio(stream); }, 100);
+            setTimeout(function(){ nextSegmentForAudio(stream); }, 300);
         }
     };
 

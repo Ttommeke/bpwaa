@@ -83,7 +83,7 @@ Representation.prototype.getSegment = function(index) {
         that.waitForNextSegment = new Promise(function(resolve,reject) {
             that.waitForNextSegmentResolve = resolve;
         });
-        if (that.segments.length >= index && index >= 0) {
+        if (that.segments.length >= index && index >= 0 && that.segments[index] != undefined) {
             var segment = that.segments[index];
             var url = segment.url.getDomain() + segment.url.getPath();
 

@@ -42,11 +42,13 @@ var StreamerPlayer = function(stream, audioContext, cantPlayCallback, canPlayCal
 };
 
 StreamerPlayer.prototype.canPlay = function() {
-    if ( this.stream.getAudioElement().readyState >= 3) {
+    var lengthBufferd = this.stream.getTimeBuffered() - this.stream.getCurrentTime();
+
+    if ( lengthBufferd >= 0) {
         return true;
     }
 
-    console.log(this.stream.getAudioElement().readyState);
+    console.log(lengthBufferd);
 
     return false;
 };
@@ -57,7 +59,19 @@ StreamerPlayer.prototype.getSource = function() {
 
 StreamerPlayer.prototype.play = function(){
     this.playing = true;
-    this.stream.getAudioElement().play();
+
+    if (navigator.userAgent.search("Chrome") > -1) {
+        this.stream.getAudioElement().play().catch(function() {
+            console.log("play error...");
+        });
+    } else {
+        try {
+            this.stream.getAudioElement().play();
+        } catch (e) {
+
+        }
+    }
+
 };
 
 StreamerPlayer.prototype.pause = function(){

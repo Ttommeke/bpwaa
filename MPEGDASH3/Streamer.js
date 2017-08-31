@@ -47,6 +47,14 @@ var Streamer = function( shakaAdaptionSet, onReadyCallBack) {
 
 Streamer.prototype.getActiveTimeRangeId = function() {
     var timeRanges = this.audioElement.buffered;
+    var currenttime = this.getCurrentTime();
+
+    for (var i = 0; i < timeRanges.length; i++) {
+        if (timeRanges.start(i) <= currenttime && this.getCurrentTime() <= timeRanges.end(i)) {
+            return i;
+        }
+    }
+
     return 0;
 };
 

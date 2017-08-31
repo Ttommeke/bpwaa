@@ -125,6 +125,8 @@ var MasterPlayer = function(period) {
     }
 
     this.setCurrentTime(0);
+
+    this.period.startBufferProccess();
 };
 
 /*
@@ -207,8 +209,6 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
     for (var i = 0; i < this.videoStreamerPlayers.length; i++) {
         this.videoStreamerPlayers[i].setCurrentTime(newCurrentTime);
     }
-    //restart the buffering process of a period to make sure new data is getting ready for the new position.
-    this.period.startBufferProccess();
 
     //change the internal clock of the player
     this.alreadyInTimeBuffer = newCurrentTime*1000;

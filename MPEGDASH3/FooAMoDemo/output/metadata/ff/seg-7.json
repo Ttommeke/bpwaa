@@ -4,24 +4,24 @@
         "y": 0,
         "z": 5,
         "movementType": "lineair",
-        "moment": 200
+        "moment": 240
     },{
         "x": 7,
         "y": 0,
         "z": 7,
         "movementType": "lineair",
-        "moment": 210
+        "moment": 250
     },{
         "x": 5,
         "y": 0,
         "z": 7,
         "movementType": "lineair",
-        "moment": 220
+        "moment": 260
     },{
         "x": 5,
         "y": 0,
         "z": 5,
         "movementType": "lineair",
-        "moment": 230
+        "moment": 270
     }
 ]

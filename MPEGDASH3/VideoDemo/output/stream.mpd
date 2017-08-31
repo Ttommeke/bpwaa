@@ -1,27 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <MPD id="940846fd-13ad-4fc5-a249-1cb2f0019bec" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-11-16T16:14:32.000Z" publishTime="2015-11-16T16:15:09.000Z" mediaPresentationDuration="P0Y0M0DT0H7M20.000S" minBufferTime="P0Y0M0DT0H0M1.000S" bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">
     <Period>
+
         <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d">
-            <SegmentTemplate media="video/$RepresentationID$/segment_$Number$.m4s" initialization="video/$RepresentationID$/init.mp4" duration="50000" startNumber="0" timescale="25000"/>
+            <SegmentTemplate media="video/$RepresentationID$/segment_$Number$.m4s" initialization="video/$RepresentationID$/init.mp4" duration="50000" startNumber="1" timescale="25000"/>
             <Representation id="2160_9600000" bandwidth="9600000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_4800000" bandwidth="4800000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_2400000" bandwidth="2400000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_1200000" bandwidth="1200000" width="3840" height="2160" frameRate="25"/>
         </AdaptationSet>
-        <AdaptationSet lang="en" mimeType="audio/mp4" codecs="mp4a.40.2" bitmovin:label="english stereo" id="bbc_audio">
+
+        <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1" id="audio_MS">
+          <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
+          <Representation audioSamplingRate="48000" bandwidth="134964" codecs="mp4a.40.2" id="audio/SR001MS">
             <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
-            <SegmentTemplate media="audio/$RepresentationID$/segment_$Number$.m4s" initialization="audio/$RepresentationID$/init.mp4" duration="88023" startNumber="0" timescale="44100"/>
-            <Representation id="1_stereo_192000" bandwidth="192000" audioSamplingRate="44100"/>
+          </Representation>
+        </AdaptationSet>
+
+        <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1" id="audio_XY">
+          <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
+          <Representation audioSamplingRate="48000" bandwidth="134964" codecs="mp4a.40.2" id="audio/SR001XY">
+            <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+          </Representation>
         </AdaptationSet>
 
         <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_forward_metadata">
-            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <SegmentTemplate duration="6000000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
             <Representation bandwidth="100" id="metadata/forward"></Representation>
         </AdaptationSet>
 
         <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_backward_metadata">
-            <SegmentTemplate duration="6000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <SegmentTemplate duration="6000000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
             <Representation bandwidth="100" id="metadata/backward"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_left_metadata">
+            <SegmentTemplate duration="6000000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/left"></Representation>
+        </AdaptationSet>
+
+        <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="bbc_audio_right_metadata">
+            <SegmentTemplate duration="6000000000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+            <Representation bandwidth="100" id="metadata/right"></Representation>
         </AdaptationSet>
     </Period>
 </MPD>

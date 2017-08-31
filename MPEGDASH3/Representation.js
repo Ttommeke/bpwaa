@@ -72,6 +72,10 @@ Representation.prototype.getSegmentIndexOnTime = function(time) {
     return index;
 };
 
+Representation.prototype.StopLastSegmentGrab = function() {
+
+};
+
 Representation.prototype.getSegment = function(index) {
     var that = this;
 
@@ -79,7 +83,7 @@ Representation.prototype.getSegment = function(index) {
         that.waitForNextSegment = new Promise(function(resolve,reject) {
             that.waitForNextSegmentResolve = resolve;
         });
-        if (that.segments.length >= index) {
+        if (that.segments.length >= index && index >= 0) {
             var segment = that.segments[index];
             var url = segment.url.getDomain() + segment.url.getPath();
 

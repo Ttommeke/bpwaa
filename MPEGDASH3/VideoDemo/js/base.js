@@ -22,7 +22,7 @@ getMpdFile("/MPEGDASH3/VideoDemo/output/stream.mpd").then(function(mpd) {
 
 		masterPlayerControls.generateControlsInDiv("forControls");
 
-		var videoElement = masterPlayer.videoStreamerPlayers[0].stream.getVideoElement();
+		/*var videoElement = masterPlayer.videoStreamerPlayers[0].stream.getVideoElement();
 		ODV.initViewer(videoElement, "3DVideo", 50, 640, 480, true, function(lon,lat) {
             var lonRad = (lon/180)*Math.PI;
             var latRad = (lat/180)*Math.PI;
@@ -44,8 +44,6 @@ getMpdFile("/MPEGDASH3/VideoDemo/output/stream.mpd").then(function(mpd) {
                 z: lengthToHeadOnXZ * Math.cos(lonRad)
             };
 
-            console.log(noseOrientation);
-
             masterPlayer.audioContext.listener.setOrientation(
                 noseOrientation.x,
                 noseOrientation.y,
@@ -55,6 +53,8 @@ getMpdFile("/MPEGDASH3/VideoDemo/output/stream.mpd").then(function(mpd) {
                 headOrientation.y,
                 headOrientation.z
             );
-        });
+        });*/
+
+        masterPlayer.setCurrentTime(2);
     });
 });

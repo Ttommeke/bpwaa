@@ -4,14 +4,14 @@
     "channels": [
         {
             "type": "STREAM",
-            "id": "bbc_audio",
-            "outputChannelIndex": 3,
+            "id": "audio_XY",
+            "outputChannelIndex": 1,
             "inputChannelIndex": 0,
             "volume": 1
         }
     ],
-    "x": 5,
+    "x": -5,
     "y": 0,
-    "z": 0,
+    "z": -8,
     "moment": 0
 }

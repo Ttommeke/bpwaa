@@ -78,14 +78,14 @@ var MasterPlayer = function(period) {
         //itterate over all the streamerplayers to find out if they are ready to play back the audio
         for (var i = 0; i < that.streamerPlayers.length; i++) {
             if (!that.streamerPlayers[i].canPlay()) {
-                console.log("one is not ready...");
+                console.log("one is not ready...", that.streamerPlayers[i].stream.name);
                 everythingReady = false;
             }
         }
 
         for (var i = 0; i < that.videoStreamerPlayers.length; i++) {
             if (!that.videoStreamerPlayers[i].canPlay()) {
-                console.log("one is not ready...");
+                console.log("one is not ready...", that.streamerPlayers[i].stream.name);
                 everythingReady = false;
             }
         }

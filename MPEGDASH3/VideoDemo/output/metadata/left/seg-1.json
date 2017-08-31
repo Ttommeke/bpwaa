@@ -1,8 +1,8 @@
 [
     {
-        "x": -5,
+        "x": 5,
         "y": 0,
-        "z": 0,
+        "z": 8,
         "movementType": "lineair",
         "moment": 0
     }

@@ -46,6 +46,8 @@ StreamerPlayer.prototype.canPlay = function() {
         return true;
     }
 
+    console.log(this.stream.getAudioElement().readyState);
+
     return false;
 };
 

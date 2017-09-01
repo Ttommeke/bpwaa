@@ -85,7 +85,7 @@ var MasterPlayer = function(period) {
 
         for (var i = 0; i < that.videoStreamerPlayers.length; i++) {
             if (!that.videoStreamerPlayers[i].canPlay()) {
-                console.log("one is not ready...", that.streamerPlayers[i].stream.name);
+                console.log("one is not ready...", that.videoStreamerPlayers[i].stream.name);
                 everythingReady = false;
             }
         }
@@ -302,12 +302,13 @@ output: pauses the player and remembers the time that is played back.
 
 */
 MasterPlayer.prototype.pause = function() {
-    this.playing = false;
 
     //save the time played back.
     if (this.playing) {
         this.alreadyInTimeBuffer += (window.performance.now() - this.startPlayTime);
     }
+
+    this.playing = false;
 
     //pause all the streamerplayers
     for (var i = 0; i < this.streamerPlayers.length; i++) {

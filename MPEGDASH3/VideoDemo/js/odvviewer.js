@@ -234,13 +234,13 @@ ODV.PlanarRenderer = function(canvasElem, videoElem, onMoveCallBack)
 		videoXstart -= Math.round((dx*scrollScale)*windowScale);
 		videoYstart -= Math.round((dy*scrollScale)*windowScale);
 
-		var centerX = videoXstart + windowWidth/2;
-		var centerY = videoYstart + windowHeight/2;
+		var centerX = videoXstart/scrollScale + windowWidth/2;
+		var centerY = videoYstart/scrollScale + windowHeight/2;
 
 		var lonPercantage = (centerX / videoWidth) - 0.5;
 		var latPercentage = (centerY / videoHeight) - 0.5;
 
-		onMoveCallBack(lonPercantage * 360, latPercentage * 180);
+		onMoveCallBack(-lonPercantage * 360, latPercentage * 180);
 	}
 
 	this.onScrollIt = function(diff)

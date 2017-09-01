@@ -120,8 +120,9 @@ Streamer.prototype.getNextSegment = function() {
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        that.representations[that.activeRepresentation].getSegment(that.segmentToLoad).then(function() {
-            that.segmentToLoad++;
+        var activeSementIndex = that.segmentToLoad;
+        that.segmentToLoad++;
+        that.representations[that.activeRepresentation].getSegment(activeSementIndex).then(function() {
 
             resolve(that);
         }).catch(function(error) {

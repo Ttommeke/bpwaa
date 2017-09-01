@@ -48,8 +48,6 @@ StreamerPlayer.prototype.canPlay = function() {
         return true;
     }
 
-    console.log(lengthBufferd);
-
     return false;
 };
 

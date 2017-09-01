@@ -2,7 +2,7 @@
 <MPD id="940846fd-13ad-4fc5-a249-1cb2f0019bec" profiles="urn:mpeg:dash:profile:isoff-main:2011" type="static" availabilityStartTime="2015-11-16T16:14:32.000Z" publishTime="2015-11-16T16:15:09.000Z" mediaPresentationDuration="P0Y0M0DT0H7M20.000S" minBufferTime="P0Y0M0DT0H0M1.000S" bitmovin:version="1.6.0" xmlns:ns2="http://www.w3.org/1999/xlink" xmlns="urn:mpeg:dash:schema:mpd:2011" xmlns:bitmovin="http://www.bitmovin.net/mpd/2015">
     <Period>
 
-        <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d">
+        <AdaptationSet mimeType="video/mp4" codecs="avc1.42c00d" id="360_video">
             <SegmentTemplate media="video/$RepresentationID$/segment_$Number$.m4s" initialization="video/$RepresentationID$/init.mp4" duration="50000" startNumber="1" timescale="25000"/>
             <Representation id="2160_9600000" bandwidth="9600000" width="3840" height="2160" frameRate="25"/>
             <Representation id="2160_4800000" bandwidth="4800000" width="3840" height="2160" frameRate="25"/>

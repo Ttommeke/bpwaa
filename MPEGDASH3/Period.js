@@ -80,9 +80,6 @@ Period.prototype.startBufferProccess = function() {
                 nextSegmentForAudio(stream);
             }).catch(function(error) {
                 setTimeout(function(){ nextSegmentForAudio(stream); }, 300);
-                console.log(stream.name);
-                console.log(error);
-                console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
             });
         } else {
             //when the stream is running out of control it is put to sleep for 100 ms.
@@ -98,14 +95,12 @@ Period.prototype.startBufferProccess = function() {
             stream.getNextSegment().then(function() {
                 nextSegmentForVideo(stream);
             }).catch(function(error) {
-                console.log(stream.name);
-                console.log(error);
-                console.log(stream.name + " done with " + stream.getTimeBuffered() + " seconds in buffer.");
+                setTimeout(function(){ nextSegmentForVideo(stream); }, 300);
             });
         } else {
             //when the stream is running out of control it is put to sleep for 500 ms.
             //after that the process will start again by checking if the other streams have already caught up.
-            setTimeout(function(){ nextSegmentForVideo(stream); }, 500);
+            setTimeout(function(){ nextSegmentForVideo(stream); }, 300);
         }
     };
 

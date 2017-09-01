@@ -72,10 +72,6 @@ Representation.prototype.getSegmentIndexOnTime = function(time) {
     return index;
 };
 
-Representation.prototype.StopLastSegmentGrab = function() {
-
-};
-
 Representation.prototype.getSegment = function(index) {
     var that = this;
 

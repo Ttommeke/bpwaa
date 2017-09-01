@@ -32,12 +32,13 @@ var VideoStreamerPlayer = function(stream, cantPlayCallback, canPlayCallback) {
     this.stream.getVideoElement().addEventListener("canplay", function() {
         canPlayCallback();
     });
-
-    //document.getElementById("bodyId").appendChild(this.stream.getVideoElement());
 };
 
 VideoStreamerPlayer.prototype.canPlay = function() {
-    if ( this.stream.getVideoElement().readyState >= 3) {
+
+    var lengthBufferd = this.stream.getTimeBuffered() - this.stream.getCurrentTime();
+
+    if (  lengthBufferd >= 0) {
         return true;
     }
 
@@ -46,7 +47,18 @@ VideoStreamerPlayer.prototype.canPlay = function() {
 
 VideoStreamerPlayer.prototype.play = function(){
     this.playing = true;
-    this.stream.getVideoElement().play();
+
+    if (navigator.userAgent.search("Chrome") > -1) {
+        this.stream.getVideoElement().play().catch(function() {
+            console.log("play error...");
+        });
+    } else {
+        try {
+            this.stream.getVideoElement().play();
+        } catch (e) {
+
+        }
+    }
 };
 
 VideoStreamerPlayer.prototype.pause = function(){

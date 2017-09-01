@@ -47,6 +47,14 @@ var VideoStreamer = function( shakaAdaptionSet, onReadyCallBack) {
 
 VideoStreamer.prototype.getActiveTimeRangeId = function() {
     var timeRanges = this.videoElement.buffered;
+    var currenttime = this.getCurrentTime();
+
+    for (var i = 0; i < timeRanges.length; i++) {
+        if (timeRanges.start(i) <= currenttime && this.getCurrentTime() <= timeRanges.end(i)) {
+            return i;
+        }
+    }
+
     return 0;
 };
 
@@ -100,7 +108,6 @@ VideoStreamer.prototype.addRepresentation = function(shakaRepresentation) {
     return new Promise(function(resolve, reject) {
         var sourceBuffer = undefined;
 
-        console.log(shakaRepresentation.mimeType + '; codecs="' + shakaRepresentation.codecs + '"');
         sourceBuffer = that.mediaSource.addSourceBuffer(shakaRepresentation.mimeType + '; codecs="' + shakaRepresentation.codecs + '"');
 
         that.representations.push(new Representation(sourceBuffer, shakaRepresentation, function() {
@@ -110,16 +117,16 @@ VideoStreamer.prototype.addRepresentation = function(shakaRepresentation) {
 };
 
 VideoStreamer.prototype.getNextSegment = function() {
-
     var that = this;
 
     return new Promise(function(resolve, reject) {
-        that.representations[that.activeRepresentation].getSegment(that.segmentToLoad).then(function() {
-            that.segmentToLoad++;
+        var activeSementIndex = that.segmentToLoad;
+        that.segmentToLoad++;
+        that.representations[that.activeRepresentation].getSegment(activeSementIndex).then(function() {
 
             resolve(that);
-        }).catch(function() {
-            reject();
+        }).catch(function(error) {
+            reject(error);
         });
     });
 };

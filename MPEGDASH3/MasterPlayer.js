@@ -54,6 +54,10 @@ var MasterPlayer = function(period) {
     this.dynamicCompressor = this.audioContext.createDynamicsCompressor();
     this.dynamicCompressor.connect(this.masterGain);
 
+    this.onPauseCallback = function() {};
+    this.onPlayCallback = function() {};
+    this.onSetTimeCallback = function(time) {};
+
     //was the MasterPlayer playing audio before there was a forced pause.
     this.playingBeforeFocedPause = false;
     var that = this;
@@ -65,27 +69,27 @@ var MasterPlayer = function(period) {
             that.playingBeforeFocedPause = true;
         }
 
-        console.log("how stop how!");
+        console.log("There was a problem in one of the data streams.");
         //pause the player
         that.pause();
     };
 
     //callback methode to be executed when an streamerPlayer finds himself back able to start playing audio again.
     var canPlayCallback = function() {
-        console.log("try....");
+        console.log("Trying to restart the audio streams.");
         var everythingReady = true;
 
         //itterate over all the streamerplayers to find out if they are ready to play back the audio
         for (var i = 0; i < that.streamerPlayers.length; i++) {
             if (!that.streamerPlayers[i].canPlay()) {
-                console.log("one is not ready...", that.streamerPlayers[i].stream.name);
+                console.log("One stream is not yet ready", that.streamerPlayers[i].stream.name);
                 everythingReady = false;
             }
         }
 
         for (var i = 0; i < that.videoStreamerPlayers.length; i++) {
             if (!that.videoStreamerPlayers[i].canPlay()) {
-                console.log("one is not ready...", that.videoStreamerPlayers[i].stream.name);
+                console.log("One stream is not yet ready", that.videoStreamerPlayers[i].stream.name);
                 everythingReady = false;
             }
         }
@@ -93,7 +97,7 @@ var MasterPlayer = function(period) {
         //if all streamerplayers are ready to play and the player was playing before a forced stop restart.
         if (everythingReady && that.playingBeforeFocedPause) {
             that.play();
-            console.log("Gogogo!");
+            console.log("Everything is okay for playback lets roll!");
 
             that.playingBeforeFocedPause = false;
         }
@@ -210,6 +214,8 @@ MasterPlayer.prototype.setCurrentTime = function(newCurrentTime) {
         this.videoStreamerPlayers[i].setCurrentTime(newCurrentTime);
     }
 
+    this.onSetTimeCallback(newCurrentTime);
+
     //change the internal clock of the player
     this.alreadyInTimeBuffer = newCurrentTime*1000;
 
@@ -261,6 +267,8 @@ MasterPlayer.prototype.play = function() {
     for (var k = 0; k < this.audioObjects.length; k++) {
         this.audioObjects[k].play();
     }
+
+    this.onPlayCallback();
 
     //set a new start time of when the play command was givin
     this.startPlayTime = window.performance.now();
@@ -329,6 +337,8 @@ MasterPlayer.prototype.pause = function() {
     for (var k = 0; k < this.audioObjects.length; k++) {
         this.audioObjects[k].pause();
     }
+
+    this.onPauseCallback();
 
     //stop the interval that is started by the play function
     clearInterval(this.interval);

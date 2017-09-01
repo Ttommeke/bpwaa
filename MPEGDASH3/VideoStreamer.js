@@ -123,7 +123,7 @@ VideoStreamer.prototype.getNextSegment = function() {
         var activeSementIndex = that.segmentToLoad;
         that.segmentToLoad++;
         that.representations[that.activeRepresentation].getSegment(activeSementIndex).then(function() {
-
+            
             resolve(that);
         }).catch(function(error) {
             reject(error);

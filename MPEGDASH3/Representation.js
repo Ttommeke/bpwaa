@@ -23,9 +23,6 @@ var Representation = function(sourceBuffer, shakaRepresentation, callbackWhenRea
 
     this.sourceBuffer = sourceBuffer;
 
-    this.waitForNextSegment = undefined;
-    this.waitForNextSegmentResolve = undefined;
-
 
     //get the initial data and call the callback function.
     this.initStream().then(function() {
@@ -76,9 +73,6 @@ Representation.prototype.getSegment = function(index) {
     var that = this;
 
     var fetchFunction = function(resolve, reject) {
-        that.waitForNextSegment = new Promise(function(resolve,reject) {
-            that.waitForNextSegmentResolve = resolve;
-        });
         if (that.segments.length >= index && index >= 0 && that.segments[index] != undefined) {
             var segment = that.segments[index];
             var url = segment.url.getDomain() + segment.url.getPath();
@@ -87,12 +81,8 @@ Representation.prototype.getSegment = function(index) {
 
                 return that.appendBuffer(data);
             }).then(function() {
-                that.waitForNextSegmentResolve();
-                that.waitForNextSegment = undefined;
                 resolve();
             }).catch(function(error) {
-                that.waitForNextSegmentResolve();
-                that.waitForNextSegment = undefined;
                 reject(error);
             });
         } else {
@@ -102,13 +92,7 @@ Representation.prototype.getSegment = function(index) {
 
     //returns a promise that is resolved upon downloading the audio and adding it to the sourceBuffer
     return new Promise(function(resolve, reject) {
-        if (that.waitForNextSegment == undefined) {
-            fetchFunction(resolve,reject);
-        } else {
-            that.waitForNextSegment.then(function() {
-                fetchFunction(resolve,reject);
-            });
-        }
+        fetchFunction(resolve,reject);
     });
 };
 

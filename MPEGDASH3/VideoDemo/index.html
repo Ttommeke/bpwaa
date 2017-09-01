@@ -1,42 +1,32 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset=utf-8>
-		<title>VideoDemo</title>
+<?xml version="1.0" ?>
+<MPD mediaPresentationDuration="PT3M43.000S" minBufferTime="PT2.00S" profiles="urn:mpeg:dash:profile:isoff-live:2011" type="static" xmlns="urn:mpeg:dash:schema:mpd:2011">
+  <!-- Created with Bento4 mp4-dash.py, VERSION=1.7.0-614 -->
+  <Period>
+    <!-- Audio -->
+    <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1" id="Arctic Monkeys">
+      <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
+      <Representation audioSamplingRate="44100" bandwidth="132028" codecs="mp4a.40.2" id="audio/und/am">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      </Representation>
+    </AdaptationSet>
 
-		<style>
-			body { margin: 0; }
-			canvas { width: 100%; height: 100% }
+    <AdaptationSet mimeType="audio/mp4" segmentAlignment="true" startWithSAP="1" id="Foo Fighters">
+      <SegmentTemplate duration="2000" initialization="$RepresentationID$/init.mp4" media="$RepresentationID$/seg-$Number$.m4s" startNumber="1" timescale="1000"/>
+      <Representation audioSamplingRate="44100" bandwidth="132412" codecs="mp4a.40.2" id="audio/und/ff">
+        <AudioChannelConfiguration schemeIdUri="urn:mpeg:dash:23003:3:audio_channel_configuration:2011" value="2"/>
+      </Representation>
+    </AdaptationSet>
 
-			#forControls {
-				position: absolute;
-				bottom: 10px;
-			}
-		</style>
+    <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Arctic Monkeys_metadata">
+      <SegmentTemplate duration="40000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+      <Representation bandwidth="100" id="metadata/am"></Representation>
+    </AdaptationSet>
 
-	    <script src="js/three.js"></script>
-	    <script src="js/odvviewer.js"></script>
+    <AdaptationSet group="14" mimeType="text/metadata" lang="en" id="Foo Fighters_metadata">
+      <SegmentTemplate duration="40000" initialization="$RepresentationID$/init.json" media="$RepresentationID$/seg-$Number$.json" startNumber="1" timescale="1000"/>
+      <Representation bandwidth="100" id="metadata/ff"></Representation>
+    </AdaptationSet>
 
-        <script type="text/javascript" src="/non_npm_dependencies/parser.js"></script>
-	    <script src="../AudioObject.js"></script>
-	    <script src="../GeneratedAudioObjectChannel.js"></script>
-	    <script src="../Streamer.js"></script>
-	    <script src="../MetaDataStreamer.js"></script>
-	    <script src="../StreamerPlayer.js"></script>
-	    <script src="../Representation.js"></script>
-	    <script src="../Period.js"></script>
-	    <script src="../MasterPlayer.js"></script>
-	    <script src="../MetaDataStreamerPlayer.js"></script>
-	    <script src="../MasterPlayerControls.js"></script>
-	    <script src="../StreamerPlayerControls.js"></script>
-	    <script src="../VideoStreamerPlayer.js"></script>
-	    <script src="../VideoStreamer.js"></script>
+  </Period>
+</MPD>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	</head>
-	<body id="bodyId">
-		<div id="3DVideo" style="width:640px; height: 480px;"></div>
-		<div id="forControls"></div>
-	</body>
-	<script src="js/base.js"></script>
-</html>

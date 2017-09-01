@@ -1,0 +1,19 @@
+{
+    "title": "Am5",
+    "description": "This is the audio source 5!",
+    "loop": true,
+    "channels": [
+        {
+            "type": "STREAM",
+            "id": "Arctic Monkeys",
+            "outputChannelIndex": 0,
+            "inputChannelIndex": 0,
+            "volume": 1,
+            "delay": 0.05
+        }
+    ],
+    "x": 1,
+    "y": 0,
+    "z": 0,
+    "moment": 0
+}

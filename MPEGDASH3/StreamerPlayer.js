@@ -60,7 +60,7 @@ StreamerPlayer.prototype.play = function(){
 
     if (navigator.userAgent.search("Chrome") > -1) {
         this.stream.getAudioElement().play().catch(function() {
-            console.log("play error...");
+            //console.log("play error...");
         });
     } else {
         try {

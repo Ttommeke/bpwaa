@@ -31,6 +31,10 @@ var VideoStreamerPlayer = function(stream, cantPlayCallback, canPlayCallback) {
     //connecting the canplay event to the canPlayCallback
     this.stream.getVideoElement().addEventListener("canplay", function() {
         canPlayCallback();
+
+        var lengthBufferd = that.stream.getTimeBuffered() - that.stream.getCurrentTime();
+        console.log(lengthBufferd);
+        console.log(that.stream.getVideoElement().readyState);
     });
 };
 
@@ -50,7 +54,7 @@ VideoStreamerPlayer.prototype.play = function(){
 
     if (navigator.userAgent.search("Chrome") > -1) {
         this.stream.getVideoElement().play().catch(function() {
-            console.log("play error...");
+            //console.log("play error...");
         });
     } else {
         try {

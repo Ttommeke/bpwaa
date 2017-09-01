@@ -109,7 +109,7 @@ Period.prototype.startBufferProccess = function() {
         stream.getNextSegment().then(function() {
             nextSegmentForMetaData(stream);
         }).catch(function() {
-            console.log("MetaDataStream done");
+            //console.log("MetaDataStream done");
         });
     };
 
